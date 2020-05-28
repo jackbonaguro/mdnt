@@ -34,7 +34,7 @@ const rpc = new rpcClient(process.env.RPCSTRING);
 rpc.getBlock(blockHash, (err, newBlock) => {
     Promise.all(newBlock.result.tx.map((txid) => {
         return new Promise((resolve, reject) => {
-            rpc.getTransaction(txid, (err, rawTx) => {
+            rpc.getRawTransaction(txid, (err, rawTx) => {
                 if (err) {
                     return reject(err);
                 }
@@ -49,7 +49,7 @@ rpc.getBlock(blockHash, (err, newBlock) => {
             return;
         }
         const receivingAddresses = result.reduce((acc, rawTx) => {
-            const tx = new bitcoreLib.Transaction(rawTx.hex);
+            const tx = new bitcoreLib.Transaction(rawTx);
             const outputs = tx.outputs.map((output) => {
                 if (output.script.isPublicKeyHashOut()) {
                     return new bitcoreLib.Address(output.script.getPublicKeyHash(), 'testnet').toObject().hash;
