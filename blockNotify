@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
+const bitcoreLib = require('bitcore-lib');
+const rpcClient = require('bitcoind-rpc');
+const mongoose = require('mongoose');
+
+const Block = require('./schema/Block');
+const blockHash = process.argv[2]
+
+// Write a file (sanity check)
+fs.writeFile(path.join(__dirname, blockHash), blockHash, function(err) {
+        if (err) {
+                console.error(err);
+        }
+});
+
+// Webhook for emails
+request.post({
+        uri: 'https://maker.ifttt.com/trigger/newblock/with/key/eLSE-nh_zD_CcW6IDrRUziAJvmIfeo5HpSmR-amK3qZ',
+        json: {
+                value1: blockHash
+        }
+}, (err) => {
+        if (err) {
+                console.error(err);
+        }
+});
+
+const rpc = new rpcClient(process.env.RPCSTRING);
+
+rpc.getBlock(blockHash, (err, newBlock) => {
+    Promise.all(newBlock.result.tx.map((txid) => {
+        return new Promise((resolve, reject) => {
+            rpc.getTransaction(txid, (err, rawTx) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (!rawTx || !rawTx.result) {
+                    return reject(new Error('Failed to getRawTransaction for '+txid));
+                }
+                return resolve(rawTx.result);
+            });
+        });
+    })).then((result) => {
+        if (!result) {
+            return;
+        }
+        const receivingAddresses = result.reduce((acc, rawTx) => {
+            const tx = new bitcoreLib.Transaction(rawTx.hex);
+            const outputs = tx.outputs.map((output) => {
+                if (output.script.isPublicKeyHashOut()) {
+                    return new bitcoreLib.Address(output.script.getPublicKeyHash(), 'testnet').toObject().hash;
+                } else {
+                    return;
+                }
+            });
+            return [...acc, ...(outputs.filter(o => (o)))];
+        }, []);
+        // console.log('New Block');
+        // console.log('Height: '+newBlock.result.height)
+        // console.log('Hash: '+blockHash);
+        // console.log('Transactions:');
+        // console.log(newBlock.result.tx);
+        // console.log('Receiving Addresses:');
+        // console.log(receivingAddresses);
+
+        mongoose.connect('mongodb://127.0.0.1/midnightcash', { useNewUrlParser: true });
+        mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
+        mongoose.connection.on('connected', () => {
+            // Publish block to the database
+            new Block({
+                height: newBlock.result.height,
+                hash: blockHash,
+                transactions: newBlock.result.tx,
+                receivingAddresses
+            }).save((err) => {
+                if (err) {
+                    console.error(err);
+                }
+                mongoose.connection.close();
+            });
+        });
+    }).catch((err) => {
+        console.error(err);
+    });
+});
