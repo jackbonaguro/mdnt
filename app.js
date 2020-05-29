@@ -55,7 +55,10 @@ const handleBlockChange = (change) => {
       let receivingAddress = account.receiveSettings.find((rs) => {
         return receivingAddresses.includes(rs.address);
       }).address
-      account.sendReceiveEmail(blockHash, receivingAddress, (err) => {
+      let receivingTxid = Object.keys(change.fullDocument.transactions).find((txid) => {
+        return transactions[txid].receivingAddresses.includes(receivingAddress);
+      });
+      account.sendReceiveEmail(blockHash, receivingAddress, receivingTxid, (err) => {
         if (err) {
           console.error(err);
         }

@@ -11,11 +11,11 @@ const Block = require('./schema/Block');
 const blockHash = process.argv[2]
 
 // Write a file (sanity check)
-fs.writeFile(path.join(__dirname, blockHash), blockHash, function(err) {
-        if (err) {
-                console.error(err);
-        }
-});
+// fs.writeFile(path.join(__dirname, blockHash), blockHash, function(err) {
+//         if (err) {
+//                 console.error(err);
+//         }
+// });
 
 // Webhook for emails
 request.post({
@@ -32,7 +32,11 @@ request.post({
 const rpc = new rpcClient(process.env.RPCSTRING);
 
 rpc.getBlock(blockHash, (err, newBlock) => {
-    Promise.all(newBlock.result.tx.map((txid) => {
+    const transactions = {};
+    for (txid of newBlock.result.tx) {
+        transactions[txid] = {};
+    }
+    Promise.all(Object.keys(transactions).map((txid) => {
         return new Promise((resolve, reject) => {
             rpc.getRawTransaction(txid, (err, rawTx) => {
                 if (err) {
@@ -41,40 +45,46 @@ rpc.getBlock(blockHash, (err, newBlock) => {
                 if (!rawTx || !rawTx.result) {
                     return reject(new Error('Failed to getRawTransaction for '+txid));
                 }
-                return resolve(rawTx.result);
+                transactions[txid].rawTx = rawTx.result;
+                return resolve();
             });
         });
-    })).then((result) => {
-        if (!result) {
-            return;
-        }
-        const receivingAddresses = result.reduce((acc, rawTx) => {
+    })).then(() => {
+        const receivingAddresses = Object.keys(transactions).reduce((acc, txid) => {
+            rawTx = transactions[txid].rawTx;
             const tx = new bitcoreLibCash.Transaction(rawTx);
-            const outputs = tx.outputs.map((output) => {
+            const newReceivingAddresses = tx.outputs.map((output) => {
                 if (output.script.isPublicKeyHashOut()) {
                     return new bitcoreLibCash.Address(output.script.getPublicKeyHash(), 'testnet').toCashAddress();
                 } else {
                     return;
                 }
-            });
-            return [...acc, ...(outputs.filter(o => (o)))];
+            }).filter(o => (o));
+            transactions[txid].receivingAddresses = newReceivingAddresses
+            return [...acc, ...newReceivingAddresses];
         }, []);
-        // console.log('New Block');
-        // console.log('Height: '+newBlock.result.height)
-        // console.log('Hash: '+blockHash);
-        // console.log('Transactions:');
-        // console.log(newBlock.result.tx);
-        // console.log('Receiving Addresses:');
-        // console.log(receivingAddresses);
+
+        if (process.env.DEBUG) {
+            console.log('New Block');
+            console.log('Height: '+newBlock.result.height)
+            console.log('Hash: '+blockHash);
+            console.log('Transactions:');
+            console.log(transactions);
+            console.log('Receiving Addresses:');
+            console.log(receivingAddresses);
+        }
 
         mongoose.connect('mongodb://127.0.0.1/midnightcash', { useNewUrlParser: true });
         mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
         mongoose.connection.on('connected', () => {
             // Publish block to the database
+            if (process.env.DEBUG) {
+                return mongoose.connection.close();
+            }
             new Block({
                 height: newBlock.result.height,
                 hash: blockHash,
-                transactions: newBlock.result.tx,
+                transactions,
                 receivingAddresses
             }).save((err) => {
                 if (err) {

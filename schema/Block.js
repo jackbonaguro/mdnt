@@ -12,9 +12,9 @@ var BlockSchema = new mongoose.Schema({
     unique: true
   },
   transactions: {
-      type: Array,
+      type: Object,
       required: true,
-      default: []
+      default: {}
   },
   receivingAddresses: {
     type: Array,

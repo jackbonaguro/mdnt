@@ -21,12 +21,13 @@ const Account = new mongoose.Schema({
 
 Account.index({ email: 1 });
 
-Account.methods.sendReceiveEmail = (blockHash, receivingAddress, callback) => {
+Account.methods.sendReceiveEmail = (blockHash, receivingAddress, receivingTxid, callback) => {
     request.post({
         uri: 'https://maker.ifttt.com/trigger/receive_tx/with/key/eLSE-nh_zD_CcW6IDrRUziAJvmIfeo5HpSmR-amK3qZ',
         json: {
             value1: blockHash,
-            value2: receivingAddress
+            value2: receivingAddress,
+            value3: receivingTxid
         }
     }, (err) => {
         if (err) {
