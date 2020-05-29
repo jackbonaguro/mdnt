@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
-const bitcoreLib = require('bitcore-lib');
+const bitcoreLibCash = require('bitcore-lib-cash');
 const rpcClient = require('bitcoind-rpc');
 const mongoose = require('mongoose');
 
@@ -49,10 +49,10 @@ rpc.getBlock(blockHash, (err, newBlock) => {
             return;
         }
         const receivingAddresses = result.reduce((acc, rawTx) => {
-            const tx = new bitcoreLib.Transaction(rawTx);
+            const tx = new bitcoreLibCash.Transaction(rawTx);
             const outputs = tx.outputs.map((output) => {
                 if (output.script.isPublicKeyHashOut()) {
-                    return new bitcoreLib.Address(output.script.getPublicKeyHash(), 'testnet').toObject().hash;
+                    return new bitcoreLibCash.Address(output.script.getPublicKeyHash(), 'testnet').toCashAddress();
                 } else {
                     return;
                 }

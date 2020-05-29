@@ -80,6 +80,19 @@ bitcoind-rpc@^0.8.1:
   resolved "https://registry.yarnpkg.com/bitcoind-rpc/-/bitcoind-rpc-0.8.1.tgz#11889972e46c346870d26cf680e3a7e3e52b1ff1"
   integrity sha512-NfhykAT/x/P1SOiog8UzltvTiv6A6d2X5VWJ3UjGeAqFLXv+IYHy+E4fFCBmgQRyIb1EIcyIZK1SVpSOGRHsaw==
 
+bitcore-lib-cash@^8.20.3:
+  version "8.20.3"
+  resolved "https://registry.yarnpkg.com/bitcore-lib-cash/-/bitcore-lib-cash-8.20.3.tgz#a082e4b735f44eae36643c2be35ab496d32d6f6f"
+  integrity sha512-dTEO8Gb+OwlgG4bwXVRVaMgcBE+U2uSY1+jWHzuT5JWlqlfHxd+Yi1H9a9p3BZOxsHMb2EKKn4DcfxyKyoOOsA==
+  dependencies:
+    bitcore-lib "^8.20.3"
+    bn.js "=4.11.8"
+    bs58 "^4.0.1"
+    buffer-compare "=1.1.1"
+    elliptic "=6.4.0"
+    inherits "=2.0.1"
+    lodash "=4.17.15"
+
 bitcore-lib@^8.20.3:
   version "8.20.3"
   resolved "https://registry.yarnpkg.com/bitcore-lib/-/bitcore-lib-8.20.3.tgz#e167e2cec43ea1528eaa11aedf6e2d33a5e46c78"
