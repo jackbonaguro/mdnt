@@ -3,11 +3,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+const next = require('next');
+const dev = process.env.NODE_DEV !== 'production' //true false
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler()
 
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');
 
-var app = express();
+const app = express();
 
 const accountRouter = require('./routes/account');
 
@@ -18,7 +22,9 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 let blockStream;
 
 db.once('open', () => {
-  initializeBlockStream();
+  nextApp.prepare().then(() => {
+    initializeBlockStream();
+  });
 });
 
 const initializeBlockStream = () => {
@@ -77,6 +83,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/account', accountRouter);
+
+app.get('*', (req, res) => {
+  // res.status(200).end('Hello World');
+  return handle(req, res);
+});
 
 app.use(function(req, res, next) {
   return res.status(404).end();

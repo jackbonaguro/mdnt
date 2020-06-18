@@ -10,13 +10,6 @@ const mongoose = require('mongoose');
 const Block = require('./schema/Block');
 const blockHash = process.argv[2]
 
-// Write a file (sanity check)
-// fs.writeFile(path.join(__dirname, blockHash), blockHash, function(err) {
-//         if (err) {
-//                 console.error(err);
-//         }
-// });
-
 // Webhook for emails
 request.post({
         uri: 'https://maker.ifttt.com/trigger/newblock/with/key/eLSE-nh_zD_CcW6IDrRUziAJvmIfeo5HpSmR-amK3qZ',

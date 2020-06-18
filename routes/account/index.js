@@ -6,6 +6,12 @@ router.use('/receiveSetting', receiveSettingRouter);
 
 const Account = require('../../schema/Account');
 
+router.post('/:username', (req, res, next) => {
+  return res.json({
+    username: req.params.username
+  });
+});
+
 router.post('/create', (req, res, next) => {
   let {
     email,
