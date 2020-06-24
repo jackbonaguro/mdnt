@@ -6,10 +6,37 @@ router.use('/receiveSetting', receiveSettingRouter);
 
 const Account = require('../../schema/Account');
 
-router.post('/:username', (req, res, next) => {
-  return res.json({
-    username: req.params.username
-  });
+router.post('/login', (req, res) => {
+  // Register the account id on the session
+  console.log('Login Params:');
+  console.log(req.body);
+  // req.session.regenerate((err) => {
+  //   if (err) {
+  //     return res.status(500).end(err);
+  //   }
+    Account.findOne({
+      email: req.body.email
+    }, (err, account) => {
+      console.log('Account:');
+      console.log(account);
+      if (err || !account) {
+        return res.status(500).end(err || new Error('Account not found'));
+      }
+      if (account.password !== req.body.password) {
+          return res.status(401).end(new Error('Incorrect password'));
+      }
+      req.session.accountId = account._id;
+      req.session.email = account.email;
+      // req.session.save((err) => {
+      //   if (err) {
+      //     return res.status(500).end(err);
+      //   }
+      //   return res.status(200).json({
+      //     email: req.body.email
+      //   });
+      // });
+    });
+  // });
 });
 
 router.post('/create', (req, res, next) => {
@@ -109,5 +136,11 @@ router.post('/changeemail', (req, res, next) => {
     return res.status(200).json(req.body).end();
   });
 });
+
+// router.post('/:username', (req, res, next) => {
+//   return res.json({
+//     username: req.params.username
+//   });
+// });
 
 module.exports = router;

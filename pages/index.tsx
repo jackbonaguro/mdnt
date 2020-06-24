@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
+// import { useSession } from 'next-auth/client'
 
 import style from './style';
 
 import List from './List';
-import ReceiveSetting from './ReceiveSetting'
-import Transaction from './Transaction'
+import ReceiveSetting from './ReceiveSetting';
+import Transaction from './Transaction';
+import AccountSettings from './AccountSettings';
 import VF from './VF';
 import HF from './HF';
 
@@ -14,7 +16,42 @@ import HF from './HF';
 global.debug = false
 global.dark = false
 
-const Home: React.FunctionComponent<{ name: string }> = ({ name }) => {
+const Home: React.FunctionComponent<{ name: string, session: any, email: string }> = ({ name, session, email }) => {
+	const [loginEmail, setLoginEmail] = useState("");
+	const [loginPassword, setLoginPassword] = useState("");
+	const accountView = email ? (<AccountSettings
+		email={email}
+	>
+	</AccountSettings>) : (<VF>
+		<h2>Account Settings</h2>
+		<div>
+			Email
+		</div>
+		<input type={'email'} onChange={(event) => {
+			setLoginEmail(event.target.value);
+		}}></input>
+		<div>
+			Password
+		</div>
+		<input type={'password'} onChange={(event) => {
+			setLoginPassword(event.target.value);
+		}}></input>
+		<button onClick={() => {
+			fetch('/account/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+					// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: JSON.stringify({
+					email: loginEmail,
+					password: loginPassword
+				})
+			}).then(res => res.json()).then(console.log).catch(console.error);
+		}}>Log In</button>
+		{session}
+	</VF>);
+
 	let receiveSettings = [
 		{
 			currency: 'BTC',
@@ -74,34 +111,7 @@ const Home: React.FunctionComponent<{ name: string }> = ({ name }) => {
 		}, ...style.main}}>
 			<h1>Midnight Cash</h1>
 			<HF>
-				<VF>
-					<h2>Account Settings</h2>
-					<div>
-						Email
-					</div>
-					<input value={'jack@midnight.cash'} onChange={() => {}}></input>
-					<div>
-						Username
-					</div>
-					<input value={'jack'} onChange={() => {}}></input>
-					<VF>
-						<h4>Notification Settings</h4>
-						<HF>
-							Email Notifications
-							<input type={'checkbox'}></input>
-						</HF>
-						<HF>
-							Push Notifications
-							<input type={'checkbox'}></input>
-						</HF>
-						<HF>
-							Webhook Notifications
-							<input type={'checkbox'}></input>
-						</HF>
-						Webhook Address
-						<input value="https://midnight.cash/webhook" onChange={() => {}}></input>
-					</VF>
-				</VF>
+				{accountView}
 				<VF>
 					<h2>Receipt Settings</h2>
 					<List>
@@ -139,11 +149,17 @@ const Home: React.FunctionComponent<{ name: string }> = ({ name }) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps<{ name: string }> = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps<{ query, req, res }> = async ({ query, req, res }) => {
+	console.log('Query:');
+	// console.log(query);
+	console.log(res.locals);
+	// console.log(res);
 	const name = query.name instanceof Array ? query.name.join(', ') : query.name
 	return {
 		props: {
-			name: name || 'Midnight Cash',
+			name: 'Midnight Cash',
+			session: req.session.id,
+			email: res.locals.email || null
 		},
 	}
 }

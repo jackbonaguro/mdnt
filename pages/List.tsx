@@ -11,7 +11,6 @@ const List: React.FunctionComponent<{ children }> = ({ children }) => {
 		) as React.ReactElement)
 		return acc
 	}, []);
-	console.log(elements)
 	return (
 		<div style={{...style.verticalFlex}}>
 			{elements}

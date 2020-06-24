@@ -7,11 +7,45 @@ const next = require('next');
 const dev = process.env.NODE_DEV !== 'production' //true false
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler()
+var session = require('express-session')
+var MongoDBStore = require('connect-mongodb-session')(session)
 
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');
 
 const app = express();
+
+var store = new MongoDBStore({
+  uri: 'mongodb://127.0.0.1/midnightcash',
+  collection: 'sessions'
+});
+store.on('error', function(error) {
+  console.log(error);
+});
+app.use(session({
+  secret: 'This is a secret',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use('*', (req, res, next) => {
+  console.log(`Session ID: ${req.session.id}`);
+  // req.session.reload((err) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return next();
+  //   }
+    console.log('Express email:');
+    console.log(req.session.email);
+    res.locals.session = req.session;
+    res.locals.email = req.session.email;
+    return next();
+  // });
+});
 
 const accountRouter = require('./routes/account');
 
