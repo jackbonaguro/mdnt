@@ -48,68 +48,72 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 	>
 	</AccountSettings>) : (<VF>
 		<h2>Account Settings</h2>
-		<div>
-			Email
-		</div>
-		<input type={'email'} onChange={(event) => {
-			setLoginEmail(event.target.value);
-		}}></input>
-		<div>
-			Password
-		</div>
-		<input type={'password'} onChange={(event) => {
-			setLoginPassword(event.target.value);
-		}}></input>
-		<button onClick={() => {
-			fetch('/account/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					email: loginEmail,
-					password: loginPassword
-				}),
-				credentials: 'include'
-			}).then(res => res.json()).then(console.log).then(() => {
-				window.location.reload();
-			}).catch(console.error);
-		}}>Log In</button>
+		<form style={style.verticalFlex}>
+			<div>
+				Email
+			</div>
+			<input type={'email'} onChange={(event) => {
+				setLoginEmail(event.target.value);
+			}}></input>
+			<div>
+				Password
+			</div>
+			<input type={'password'} onChange={(event) => {
+				setLoginPassword(event.target.value);
+			}}></input>
+			<button onClick={() => {
+				fetch('/account/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: loginEmail,
+						password: loginPassword
+					}),
+					credentials: 'include'
+				}).then(res => res.json()).then(console.log).then(() => {
+					window.location.reload();
+				}).catch(console.error);
+			}}>Log In</button>
+		</form>
 		<div style={style.hr} key={Math.random().toString()}></div>
-		<div>
-			Email
-		</div>
-		<input type={'email'} onChange={(event) => {
-			setLoginEmail(event.target.value);
-		}}></input>
-		<div>
-			Username
-		</div>
-		<input type={'text'} onChange={(event) => {
-			setLoginUsername(event.target.value);
-		}}></input>
-		<div>
-			Password
-		</div>
-		<input type={'password'} onChange={(event) => {
-			setLoginPassword(event.target.value);
-		}}></input>
-		<button onClick={() => {
-			fetch('/account/create', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					email: loginEmail,
-					username: loginUsername,
-					password: loginPassword
-				}),
-				credentials: 'include'
-			}).then(res => res.json()).then(console.log).then(() => {
-				window.location.reload();
-			}).catch(console.error);
-		}}>Sign Up</button>
+		<form style={style.verticalFlex}>
+			<div>
+				Email
+			</div>
+			<input type={'email'} name={'email'} onChange={(event) => {
+				setLoginEmail(event.target.value);
+			}}></input>
+			<div>
+				Username
+			</div>
+			<input type={'text'} name={'username'} onChange={(event) => {
+				setLoginUsername(event.target.value);
+			}}></input>
+			<div>
+				Password
+			</div>
+			<input type={'password'} name={'password'} onChange={(event) => {
+				setLoginPassword(event.target.value);
+			}}></input>
+			<button onClick={() => {
+				fetch('/account/create', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: loginEmail,
+						username: loginUsername,
+						password: loginPassword
+					}),
+					credentials: 'include'
+				}).then(res => res.json()).then(console.log).then(() => {
+					window.location.reload();
+				}).catch(console.error);
+			}}>Sign Up</button>
+		</form>
 	</VF>);
 
 	let receiveSettingsCollection = receiveSettings ? (receiveSettings
