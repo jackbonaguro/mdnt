@@ -10,8 +10,6 @@ const Account = require('../../schema/Account');
 
 router.post('/login', (req, res) => {
   // Register the account id on the session
-  console.log('Login Params:');
-  console.log(req.body);
   return Account.findOne({
     email: req.body.email
   }, (err, account) => {
@@ -32,8 +30,6 @@ router.post('/login', (req, res) => {
       });
     });
   });
-  // req.session.email = req.session.email ? req.session.email + 1 : 1;
-  // return res.json({});
 });
 
 router.post('/logout', (req, res, next) => {
@@ -72,7 +68,28 @@ router.post('/create', (req, res, next) => {
   });
 });
 
-router.post('/changepassword', (req, res, next) => {
+const authMiddleware = (req, res, next) => {
+  let {
+    email
+  } = req.body;
+  Account.findOne({
+    _id: req.session.account
+  }, (err, account) => {
+    if (err) {
+      return res.status(400).json(err).end();
+    }
+    if (!account) {
+      return res.status(400).json(new Error('Account not found')).end();
+    }
+    if (account.email !== email) {
+      return res.status(401).end(new Error('Unauthenticated request'));
+    }
+    req.account = account;
+    return next();
+  })
+};
+
+router.post('/changepassword', authMiddleware, (req, res, next) => {
   let {
     email,
     newPassword
@@ -96,7 +113,7 @@ router.post('/changepassword', (req, res, next) => {
   });
 });
 
-router.post('/changeusername', (req, res, next) => {
+router.post('/changeusername', authMiddleware, (req, res, next) => {
   let {
     email,
     newUsername
@@ -120,7 +137,7 @@ router.post('/changeusername', (req, res, next) => {
   });
 });
 
-router.post('/changeemail', (req, res, next) => {
+router.post('/changeemail', authMiddleware, (req, res, next) => {
   let {
     email,
     newEmail
@@ -144,10 +161,9 @@ router.post('/changeemail', (req, res, next) => {
   });
 });
 
-// router.post('/:username', (req, res, next) => {
-//   return res.json({
-//     username: req.params.username
-//   });
-// });
+router.post('/', authMiddleware, (req, res, next) => {
+  let data = req.account.getAccount();
+  return res.json(data);
+});
 
 module.exports = router;

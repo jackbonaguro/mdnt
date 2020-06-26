@@ -20,8 +20,8 @@ var store = new MongoDBStore({
   uri: 'mongodb://127.0.0.1/midnightcash',
   collection: 'sessions'
 });
-store.on('error', function(error) {
-  console.log(error);
+store.on('error', (err) => {
+  console.error(err);
 });
 
 const accountRouter = require('./routes/account');
@@ -139,13 +139,10 @@ app.use((req, res, next) => {
 app.use('/account', accountRouter);
 
 app.get('*', (req, res) => {
-  // res.status(200).end('Hello World');
-  console.log(req.session);
   if (req.session.account) {
     return Account.findOne({
       _id: req.session.account
     }, (err, account) => {
-      console.log('Account');
       res.locals.email = account.email;
       return handle(req, res);
     });

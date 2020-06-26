@@ -37,4 +37,16 @@ Account.methods.sendReceiveEmail = (blockHash, receivingAddress, receivingTxid, 
     });
 };
 
-module.exports = mongoose.model('Account', Account);
+const AccountModel = mongoose.model('Account', Account);
+
+// Can't use arrow function due to dropping of `this`
+AccountModel.prototype.getAccount = function () {
+  let self = this;
+  return {
+    email: self.email,
+    username: self.username,
+    receiveSettings: self.receiveSettings
+  };
+};
+
+module.exports = AccountModel;

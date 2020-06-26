@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 // import { useSession } from 'next-auth/client'
@@ -19,6 +19,25 @@ global.dark = false
 const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, email }) => {
 	const [loginEmail, setLoginEmail] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
+	const [receiveSettings, setReceiveSettings] = useState([]);
+	useEffect(() => {
+		fetch('/account/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: JSON.stringify({
+				email
+			}),
+			credentials: 'include'
+		}).then(res => res.json()).then((res) => {
+			console.log(res);
+			return Promise.resolve(res);
+		}).then((res) => {
+			setReceiveSettings(res.receiveSettings);
+		}).catch(console.error);
+	});
 	const accountView = email ? (<AccountSettings
 		email={email}
 	>
@@ -54,18 +73,27 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 		}}>Log In</button>
 	</VF>);
 
-	let receiveSettings = [
-		{
-			currency: 'BTC',
+	let receiveSettingsCollection = receiveSettings ? (receiveSettings
+	// [
+	// 	{
+	// 		currency: 'BTC',
+	// 		type: 'Address',
+	// 		value: '34FCBNrW6pnk4g2cRuPwjQcztLkGyGSAM2'
+	// 	},
+	// 	{
+	// 		currency: 'BCH',
+	// 		type: 'Address',
+	// 		value: 'qzu2elrm9k4h6y0cypsc4s52er3lx3zrpgaf4mfxru'
+	// 	}
+	// ]
+	.map((i) => {
+		return {
+			currency: i.currency,
 			type: 'Address',
-			value: '34FCBNrW6pnk4g2cRuPwjQcztLkGyGSAM2'
-		},
-		{
-			currency: 'BCH',
-			type: 'Address',
-			value: 'qzu2elrm9k4h6y0cypsc4s52er3lx3zrpgaf4mfxru'
+			value: i.address
 		}
-	].map((i) => {
+	})
+	.map((i) => {
 		return (
 			<ReceiveSetting
 				key={i.currency}
@@ -74,8 +102,9 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 				value={i.value}
 			></ReceiveSetting>
 		)
-	})
+	})) : []
 
+	console.log(receiveSettings);
 	let donationHistory = [
 		{
 			currency: 'BTC',
@@ -117,7 +146,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 				<VF>
 					<h2>Receipt Settings</h2>
 					<List>
-						{receiveSettings}
+						{receiveSettingsCollection}
 					</List>
 					<VF>
 						<h4>Add Receipt Method</h4>
@@ -152,10 +181,6 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 export default Home
 
 export const getServerSideProps: GetServerSideProps<{ query, req, res }> = async ({ query, req, res }) => {
-	console.log('Query:');
-	// console.log(query);
-	console.log(JSON.stringify(res.locals));
-	// console.log(res);
 	const name = query.name instanceof Array ? query.name.join(', ') : query.name
 	return {
 		props: {
