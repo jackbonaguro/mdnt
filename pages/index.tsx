@@ -20,8 +20,8 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 	const [loginEmail, setLoginEmail] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
 	const [receiveSettings, setReceiveSettings] = useState([]);
-	const [newCurrency, setNewCurrency] = useState("");
-	const [newType, setNewType] = useState("");
+	const [newCurrency, setNewCurrency] = useState("BTC");
+	const [newType, setNewType] = useState("Address");
 	const [newValue, setNewValue] = useState("");
 
 	useEffect(() => {
@@ -183,8 +183,6 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 									currency: newCurrency,
 									address: newValue
 								})
-							}).then(res => res.json()).then(console.log).then(() => {
-								// window.location.reload();
 							}).catch(console.error);
 						}}>Add</button>
 					</VF>
