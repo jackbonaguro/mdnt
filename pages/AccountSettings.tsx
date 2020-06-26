@@ -5,7 +5,7 @@ import HF from './HF';
 
 import style from './style';
 
-const AccountSettings: React.FunctionComponent<{ email: string, children }> = ({ email, children }) => {
+const AccountSettings: React.FunctionComponent<{ email: string, username: string, children }> = ({ email, username, children }) => {
 	return (
 		<VF>
             <h2>Account Settings</h2>
@@ -16,7 +16,7 @@ const AccountSettings: React.FunctionComponent<{ email: string, children }> = ({
             <div>
                 Username
             </div>
-            <input value={'jack'} onChange={() => {}}></input>
+            <input value={username} onChange={() => {}}></input>
             <VF>
                 <h4>Notification Settings</h4>
                 <HF>

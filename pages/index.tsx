@@ -24,6 +24,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 	const [newCurrency, setNewCurrency] = useState("BTC");
 	const [newType, setNewType] = useState("Address");
 	const [newValue, setNewValue] = useState("");
+	const [username, setUsername] = useState("");
 
 	useEffect(() => {
 		fetch('/account/', {
@@ -41,10 +42,12 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 			return Promise.resolve(res);
 		}).then((res) => {
 			setReceiveSettings(res.receiveSettings);
+			if (res.username) setUsername(res.username);
 		}).catch(console.error);
 	});
 	const accountView = email ? (<AccountSettings
 		email={email}
+		username={username}
 	>
 	</AccountSettings>) : (<VF>
 		<h2>Account Settings</h2>
@@ -226,7 +229,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 						}}>Add</button>
 					</VF>
 					<h4>Link to donation page</h4>
-					<a href={'https://midnight.cash/jack'} style={style.link}>https://midnight.cash/jack</a>
+					<a href={`https://midnight.cash/${username}`} style={style.link}>{`https://midnight.cash/${username}`}</a>
 				</VF>
 				<VF>
 					<h2>Donation History</h2>
