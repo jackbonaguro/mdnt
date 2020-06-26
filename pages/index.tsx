@@ -16,7 +16,7 @@ import HF from './HF';
 global.debug = false
 global.dark = false
 
-const Home: React.FunctionComponent<{ name: string, session: any, email: string }> = ({ name, session, email }) => {
+const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, email }) => {
 	const [loginEmail, setLoginEmail] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
 	const accountView = email ? (<AccountSettings
@@ -46,10 +46,12 @@ const Home: React.FunctionComponent<{ name: string, session: any, email: string 
 				body: JSON.stringify({
 					email: loginEmail,
 					password: loginPassword
-				})
-			}).then(res => res.json()).then(console.log).catch(console.error);
+				}),
+				credentials: 'include'
+			}).then(res => res.json()).then(console.log).then(() => {
+				window.location.reload();
+			}).catch(console.error);
 		}}>Log In</button>
-		{session}
 	</VF>);
 
 	let receiveSettings = [
@@ -107,7 +109,7 @@ const Home: React.FunctionComponent<{ name: string, session: any, email: string 
 
 	return (
 		<VF style={{...{
-			height: '100vh'
+			minHeight: '100vh'
 		}, ...style.main}}>
 			<h1>Midnight Cash</h1>
 			<HF>
@@ -152,13 +154,12 @@ export default Home
 export const getServerSideProps: GetServerSideProps<{ query, req, res }> = async ({ query, req, res }) => {
 	console.log('Query:');
 	// console.log(query);
-	console.log(res.locals);
+	console.log(JSON.stringify(res.locals));
 	// console.log(res);
 	const name = query.name instanceof Array ? query.name.join(', ') : query.name
 	return {
 		props: {
 			name: 'Midnight Cash',
-			session: req.session.id,
 			email: res.locals.email || null
 		},
 	}

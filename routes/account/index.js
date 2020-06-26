@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const Session = require('../../schema/Session');
+
 const receiveSettingRouter = require('./receiveSetting');
 router.use('/receiveSetting', receiveSettingRouter);
 
@@ -10,33 +12,38 @@ router.post('/login', (req, res) => {
   // Register the account id on the session
   console.log('Login Params:');
   console.log(req.body);
-  // req.session.regenerate((err) => {
-  //   if (err) {
-  //     return res.status(500).end(err);
-  //   }
-    Account.findOne({
-      email: req.body.email
-    }, (err, account) => {
-      console.log('Account:');
-      console.log(account);
-      if (err || !account) {
-        return res.status(500).end(err || new Error('Account not found'));
+  return Account.findOne({
+    email: req.body.email
+  }, (err, account) => {
+    if (err || !account) {
+      return res.status(500).end(err || new Error('Account not found'));
+    }
+    if (account.password !== req.body.password) {
+      return res.status(401).end(new Error('Incorrect password'));
+    }
+
+    req.session.account = account._id;
+    return req.session.save((err) => {
+      if (err) {
+        return res.status(500).end(err);
       }
-      if (account.password !== req.body.password) {
-          return res.status(401).end(new Error('Incorrect password'));
-      }
-      req.session.accountId = account._id;
-      req.session.email = account.email;
-      // req.session.save((err) => {
-      //   if (err) {
-      //     return res.status(500).end(err);
-      //   }
-      //   return res.status(200).json({
-      //     email: req.body.email
-      //   });
-      // });
+      return res.status(200).json({
+        email: req.body.email
+      });
     });
-  // });
+  });
+  // req.session.email = req.session.email ? req.session.email + 1 : 1;
+  // return res.json({});
+});
+
+router.post('/logout', (req, res, next) => {
+  req.session.account = null;
+  return req.session.save((err) => {
+    if (err) {
+      return res.status(500).end(err);
+    }
+    return res.status(200).json({});
+  });
 });
 
 router.post('/create', (req, res, next) => {

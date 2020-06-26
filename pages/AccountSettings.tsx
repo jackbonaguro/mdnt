@@ -33,6 +33,18 @@ const AccountSettings: React.FunctionComponent<{ email: string, children }> = ({
                 </HF>
                 Webhook Address
                 <input value="https://midnight.cash/webhook" onChange={() => {}}></input>
+                <button onClick={() => {
+                    fetch('/account/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        credentials: 'include'
+                    }).then(res => res.json()).then(console.log).then(() => {
+                        window.location.reload();
+                    }).catch(console.error);
+                }}>Log Out</button>
             </VF>
         </VF>
 	)

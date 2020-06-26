@@ -12,6 +12,7 @@ var MongoDBStore = require('connect-mongodb-session')(session)
 
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');
+const Session = require('./schema/Session');
 
 const app = express();
 
@@ -22,34 +23,14 @@ var store = new MongoDBStore({
 store.on('error', function(error) {
   console.log(error);
 });
-app.use(session({
-  secret: 'This is a secret',
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
-  },
-  store: store,
-  resave: false,
-  saveUninitialized: true
-}));
-
-app.use('*', (req, res, next) => {
-  console.log(`Session ID: ${req.session.id}`);
-  // req.session.reload((err) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return next();
-  //   }
-    console.log('Express email:');
-    console.log(req.session.email);
-    res.locals.session = req.session;
-    res.locals.email = req.session.email;
-    return next();
-  // });
-});
 
 const accountRouter = require('./routes/account');
 
-mongoose.connect('mongodb://127.0.0.1/midnightcash', { useNewUrlParser: true });
+mongoose.connect('mongodb://127.0.0.1/midnightcash', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true
+});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -116,10 +97,59 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const createSession = (req, res, next) => {
+  return Session.create((err, session) => {
+    if (err) {
+      return res.status(500).end(err);
+    }
+    req.session = session;
+    res.cookie('connect.sid', 's:' + session._id.toHexString());
+    return next();
+  });
+};
+
+app.use((req, res, next) => {
+  try {
+    let cookie = req.cookies['connect.sid'];
+    if (!cookie) {
+      // Create a new session
+      return createSession(req, res, next);
+    }
+    let sessionID = mongoose.Types.ObjectId.createFromHexString(cookie.substr(2));
+    
+    Session.findOne({
+        _id: sessionID
+    }, (err, session) => {
+        if (err) {
+          return res.status(500).end(err);
+        }
+        if (!session) {
+          return createSession(req, res, next);
+        }
+        req.session = session;
+        return next();
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).end(err);
+  }
+});
+
 app.use('/account', accountRouter);
 
 app.get('*', (req, res) => {
   // res.status(200).end('Hello World');
+  console.log(req.session);
+  if (req.session.account) {
+    return Account.findOne({
+      _id: req.session.account
+    }, (err, account) => {
+      console.log('Account');
+      res.locals.email = account.email;
+      return handle(req, res);
+    });
+  }
   return handle(req, res);
 });
 
