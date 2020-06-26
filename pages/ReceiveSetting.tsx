@@ -5,7 +5,7 @@ import style from './style';
 import VF from './VF'
 import HF from './HF'
 
-const ReceiveSetting: React.FunctionComponent<{ currency: string, type: string, value: string }> = ({ currency, type, value }) => (
+const ReceiveSetting: React.FunctionComponent<{ currency: string, type: string, value: string, email: string }> = ({ currency, type, value, email }) => (
 	<VF>
         <div>
             {`Currency: ${currency}`}
@@ -13,7 +13,20 @@ const ReceiveSetting: React.FunctionComponent<{ currency: string, type: string, 
         <div>
             {`${type}: ${value}`}
         </div>
-        <button>Remove</button>
+        <button onClick={() => {
+			fetch('/account/receiveSetting/remove', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					email,
+					currency
+				})
+			}).then(res => res.json()).then(console.log).then(() => {
+				// window.location.reload();
+			}).catch(console.error);
+		}}>Remove</button>
     </VF>
 )
   

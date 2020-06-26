@@ -20,6 +20,10 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 	const [loginEmail, setLoginEmail] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
 	const [receiveSettings, setReceiveSettings] = useState([]);
+	const [newCurrency, setNewCurrency] = useState("");
+	const [newType, setNewType] = useState("");
+	const [newValue, setNewValue] = useState("");
+
 	useEffect(() => {
 		fetch('/account/', {
 			method: 'POST',
@@ -32,7 +36,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 			}),
 			credentials: 'include'
 		}).then(res => res.json()).then((res) => {
-			console.log(res);
+			// console.log(res);
 			return Promise.resolve(res);
 		}).then((res) => {
 			setReceiveSettings(res.receiveSettings);
@@ -100,11 +104,11 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 				currency={i.currency}
 				type={i.type}
 				value={i.value}
+				email={email}
 			></ReceiveSetting>
 		)
-	})) : []
+	})) : [];
 
-	console.log(receiveSettings);
 	let donationHistory = [
 		{
 			currency: 'BTC',
@@ -151,18 +155,38 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 					<VF>
 						<h4>Add Receipt Method</h4>
 						Currency
-						<select>
+						<select onChange={(event) => {
+							setNewCurrency(event.target.value);
+						}}>
 							<option value={'BTC'}>BTC</option>
-							<option value={'BTC'}>BCH</option>
+							<option value={'BCH'}>BCH</option>
 						</select>
 						Type
-						<select>
+						<select onChange={(event) => {
+							setNewType(event.target.value);
+						}}>
 							<option value={'address'}>Address</option>
 							<option value={'xpub'}>Extended Public Key</option>
 						</select>
 						Value
-						<input></input>
-						<button>Add</button>
+						<input onChange={(event) => {
+							setNewValue(event.target.value);
+						}}></input>
+						<button onClick={() => {
+							fetch('/account/receiveSetting/add', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({
+									email,
+									currency: newCurrency,
+									address: newValue
+								})
+							}).then(res => res.json()).then(console.log).then(() => {
+								// window.location.reload();
+							}).catch(console.error);
+						}}>Add</button>
 					</VF>
 					<h4>Link to donation page</h4>
 					<a href={'https://midnight.cash/jack'} style={style.link}>https://midnight.cash/jack</a>

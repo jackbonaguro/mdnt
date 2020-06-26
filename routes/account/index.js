@@ -4,7 +4,6 @@ var router = express.Router();
 const Session = require('../../schema/Session');
 
 const receiveSettingRouter = require('./receiveSetting');
-router.use('/receiveSetting', receiveSettingRouter);
 
 const Account = require('../../schema/Account');
 
@@ -88,6 +87,8 @@ const authMiddleware = (req, res, next) => {
     return next();
   })
 };
+
+router.use('/receiveSetting', authMiddleware, receiveSettingRouter);
 
 router.post('/changepassword', authMiddleware, (req, res, next) => {
   let {
