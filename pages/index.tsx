@@ -18,6 +18,7 @@ global.dark = false
 
 const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, email }) => {
 	const [loginEmail, setLoginEmail] = useState("");
+	const [loginUsername, setLoginUsername] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
 	const [receiveSettings, setReceiveSettings] = useState([]);
 	const [newCurrency, setNewCurrency] = useState("BTC");
@@ -64,7 +65,6 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-					// 'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: JSON.stringify({
 					email: loginEmail,
@@ -75,6 +75,41 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 				window.location.reload();
 			}).catch(console.error);
 		}}>Log In</button>
+		<div style={style.hr} key={Math.random().toString()}></div>
+		<div>
+			Email
+		</div>
+		<input type={'email'} onChange={(event) => {
+			setLoginEmail(event.target.value);
+		}}></input>
+		<div>
+			Username
+		</div>
+		<input type={'text'} onChange={(event) => {
+			setLoginUsername(event.target.value);
+		}}></input>
+		<div>
+			Password
+		</div>
+		<input type={'password'} onChange={(event) => {
+			setLoginPassword(event.target.value);
+		}}></input>
+		<button onClick={() => {
+			fetch('/account/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					email: loginEmail,
+					username: loginUsername,
+					password: loginPassword
+				}),
+				credentials: 'include'
+			}).then(res => res.json()).then(console.log).then(() => {
+				window.location.reload();
+			}).catch(console.error);
+		}}>Sign Up</button>
 	</VF>);
 
 	let receiveSettingsCollection = receiveSettings ? (receiveSettings

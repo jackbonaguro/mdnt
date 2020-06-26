@@ -63,7 +63,14 @@ router.post('/create', (req, res, next) => {
     if (!newAccount) {
       return res.status(400).json(new Error('Failed to save account')).end();
     }
-    return res.status(200).json(req.body).end();
+
+    req.session.account = newAccount._id;
+    return req.session.save((err) => {
+      if (err) {
+        return res.status(500).end(err);
+      }
+      return res.status(200).json({});
+    });
   });
 });
 
