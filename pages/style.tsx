@@ -2,13 +2,14 @@ import React, { CSSProperties } from "react";
 
 const styles = {
     verticalFlex: {
-        display: "flex",
+        minWidth: "auto",
+        display: "inline-flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start"
     } as CSSProperties,
     horizontalFlex: {
-        display: "flex",
+        display: "inline-flex",
         flexDirection: "row",
         alignItems: "start",
         justifyContent: "center"

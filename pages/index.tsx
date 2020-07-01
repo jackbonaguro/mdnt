@@ -13,8 +13,8 @@ import VF from './VF';
 import HF from './HF';
 
 
-global.debug = false
-global.dark = false
+global.debug = false;
+global.dark = false;
 
 const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, email }) => {
 	const [loginEmail, setLoginEmail] = useState("");
@@ -184,7 +184,8 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 
 	return (
 		<VF style={{...{
-			minHeight: '100vh'
+			minHeight: '100vh',
+			minWidth: '100vw'
 		}, ...style.main}}>
 			<h1>Midnight Cash</h1>
 			<HF>
@@ -208,7 +209,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 							setNewType(event.target.value);
 						}}>
 							<option value={'address'}>Address</option>
-							<option value={'xpub'}>Extended Public Key</option>
+							<option value={'xpub'}>Extended Public Key (Experimental)</option>
 						</select>
 						Value
 						<input onChange={(event) => {
