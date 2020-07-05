@@ -6,7 +6,7 @@ const Session = new mongoose.Schema({
 
 Session.index({ account: 1 });
 
-Session.statics.create = (callback) => {
+Session.statics.create = function(callback) {
   let session = new SessionModel({});
   session.save((err, newSession) => {
     if (err) {

@@ -7,11 +7,14 @@ const RuntimeSetting = new mongoose.Schema({
     type: Number,
     default: 0,
     required: true
+  },
+  rpcQueueHeight: {
+    type: Number,
+    default: 0,
+    required: true
   }
 }, { minimize: false });
 
-RuntimeSetting.statics.startRequest = () => {
-
-}
+RuntimeSetting.statics.startRequest = function() {};
 
 module.exports = mongoose.model('RuntimeSetting', RuntimeSetting);
