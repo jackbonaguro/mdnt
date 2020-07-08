@@ -9,7 +9,7 @@ const txid = 'e1d944dc8509776c758834dc726fac70cb18495cd4fc525ed582a498e02b9dbf';
 const transactions = [];
 
 // Got it; local regtest is around 50 / 50 at 24 concurrent requests. 16 (default rpcworkqueue) should be safe.
-for (let i = 0; i < 24; i++) {
+for (let i = 0; i < 64; i++) {
     transactions.push(txid);
 }
 mongoose.connect('mongodb://127.0.0.1/midnightcash-test', {

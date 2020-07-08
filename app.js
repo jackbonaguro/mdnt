@@ -7,29 +7,20 @@ const next = require('next');
 const dev = process.env.NODE_DEV !== 'production' //true false
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler()
-var session = require('express-session')
-var MongoDBStore = require('connect-mongodb-session')(session)
-
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');
 const Session = require('./schema/Session');
+const RPCRequestManager = require('./RPCRequestManager');
 
 const app = express();
-
-var store = new MongoDBStore({
-  uri: 'mongodb://127.0.0.1/midnightcash',
-  collection: 'sessions'
-});
-store.on('error', (err) => {
-  console.error(err);
-});
 
 const accountRouter = require('./routes/account');
 
 mongoose.connect('mongodb://127.0.0.1/midnightcash', {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: true,
 });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -38,7 +29,12 @@ let blockStream;
 
 db.once('open', () => {
   nextApp.prepare().then(() => {
-    initializeBlockStream();
+    RPCRequestManager.start((err) => {
+      if (err) {
+        console.error(err);
+      }
+      initializeBlockStream();
+    });
   });
 });
 
@@ -56,12 +52,24 @@ const initializeBlockStream = () => {
 };
 
 const handleBlockChange = (change) => {
-  if (change.operationType === 'insert') {
-    // Process new block
+  if (change.operationType === 'update') {
+    console.log(change);
+    let transactions = change.fullDocument.transactions;
+    let allTxsProcessed = Object.values(transactions).reduce((acc, isProcessed) => {
+      return (acc || isProcessed);
+    }, false);
+
+    // Only process block if all its transactions are processed (each will cause a blockStream event)
+    if (!allTxsProcessed) {
+      return console.log('Skipping block that is still processing');
+    }
+    console.log('All txs processed; notifying addresses');
+
+    console.log(change.fullDocument);
+
     let blockHash = change.fullDocument.hash;
     let blockHeight = change.fullDocument.height;
     let receivingAddresses = change.fullDocument.receivingAddresses;
-    let transactions = change.fullDocument.transactions;
 
     Account.find({
       receiveSettings: {

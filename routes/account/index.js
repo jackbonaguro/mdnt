@@ -88,7 +88,7 @@ const authMiddleware = (req, res, next) => {
       return res.status(400).json(new Error('Account not found')).end();
     }
     if (account.email !== email) {
-      return res.status(401).end(new Error('Unauthenticated request'));
+      return res.status(401).json(new Error('Unauthenticated request')).end();
     }
     req.account = account;
     return next();

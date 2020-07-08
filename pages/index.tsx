@@ -26,7 +26,14 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 	const [newValue, setNewValue] = useState("");
 	const [username, setUsername] = useState("");
 
+	// onLoad effect
 	useEffect(() => {
+		console.log(`Notification.permission: ${Notification.permission}`);
+		if (Notification.permission !== 'granted') {
+			Notification.requestPermission().then((result) => {
+				console.log(result);
+			});
+		}
 		fetch('/account/', {
 			method: 'POST',
 			headers: {
@@ -44,7 +51,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 			setReceiveSettings(res.receiveSettings);
 			if (res.username) setUsername(res.username);
 		}).catch(console.error);
-	});
+	}, []);
 	const accountView = email ? (<AccountSettings
 		email={email}
 		username={username}
@@ -188,6 +195,14 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 			minWidth: '100vw'
 		}, ...style.main}}>
 			<h1>Midnight Cash</h1>
+			<button onClick={() => {
+				console.log('Test notification');
+				let notification = new Notification('Donation Received', {
+					body: '<b><a>Click here</a> to see details</b>',
+					icon: 'https://thebox.network/favicon.png',
+					tag: '1234567890'
+				});
+			}}>Test Notification</button>
 			<HF>
 				{accountView}
 				<VF>

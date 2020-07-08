@@ -19,11 +19,11 @@ class RPCRequestManager {
         this.threshold = 0; // In-memory means single-process. Put in DB to make process non-stateful & allow multiple workers
     }
 
-    start() {
-        this.initializeRequestStream();
+    start(callback) {
+        return this.initializeRequestStream(callback);
     }
 
-    initializeRequestStream() {
+    initializeRequestStream(callback) {
         this.requestStream = RPCRequest.watch(null, {
             fullDocument: 'updateLookup'
         }).on('change', (change) => {
@@ -34,9 +34,9 @@ class RPCRequestManager {
             console.error(err);
         }).on('close', (err) => {
             this.initializeRequestStream();
-        }).on('open', () => {
-            console.log('RPC Request Stream initialized')
         });
+        console.log('RPC Request Stream initialized');
+        return callback();
     }
 
 
