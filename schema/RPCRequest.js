@@ -47,59 +47,63 @@ const processNewBlock = (newBlock) => {
 };
 
 const processNewBlockTransaction = (rawTx, params) => {
-    console.log('Process New Block Transaction');
-    console.log(rawTx.result);
-    console.log(params);
-    const bitcoreTx = new bitcoreLibCash.Transaction(rawTx.result);
-    const receivingAddresses = bitcoreTx.outputs.map((output) => {
-        if (output.script.isPublicKeyHashOut()) {
-            return new bitcoreLibCash.Address(output.script.getPublicKeyHash(), 'testnet').toCashAddress();
-        } else {
-            return;
-        }
-    }).filter(o => (o));
-    console.log(receivingAddresses);
-    return Transaction.findOne({
-        hash: params[0]
-    }, (err, tx) => {
-        if (err) {
-            console.error(err);
-        }
-        console.log(tx);
-        let update = {
-            $addToSet: {
-                receivingAddresses: {
-                    $each: receivingAddresses
-                }
+    try {
+        console.log('Process New Block Transaction');
+        console.log(rawTx.result);
+        console.log(params);
+        const bitcoreTx = new bitcoreLibCash.Transaction(rawTx.result);
+        const receivingAddresses = bitcoreTx.outputs.map((output) => {
+            if (output.script.isPublicKeyHashOut()) {
+                return new bitcoreLibCash.Address(output.script.getPublicKeyHash(), 'testnet').toCashAddress();
+            } else {
+                return;
             }
-        };
-        update[`transactions.${tx.hash}`] = {
-            processed: true,
-            receivingAddresses,
-            rawTx: rawTx.result
-        };
-        Block.findOneAndUpdate({
-            hash: tx.block
-        }, update, {}, (err, block) => {
+        }).filter(o => (o));
+        console.log(receivingAddresses);
+        return Transaction.findOne({
+            hash: params[0]
+        }, (err, tx) => {
             if (err) {
                 console.error(err);
             }
-            console.log(block);
-        });
-        Transaction.findOneAndUpdate({
-            hash: tx.hash
-        }, {
-            $addToSet: {
-                receivingAddresses: {
-                    $each: receivingAddresses
+            console.log(tx);
+            let update = {
+                $addToSet: {
+                    receivingAddresses: {
+                        $each: receivingAddresses
+                    }
                 }
-            }
-        }, {}, (err, updatedTx) => {
-            if (err) {
-                console.error(err);
-            }
+            };
+            update[`transactions.${tx.hash}`] = {
+                processed: true,
+                receivingAddresses,
+                rawTx: rawTx.result
+            };
+            Block.findOneAndUpdate({
+                hash: tx.block
+            }, update, {}, (err, block) => {
+                if (err) {
+                    console.error(err);
+                }
+                console.log(block);
+            });
+            Transaction.findOneAndUpdate({
+                hash: tx.hash
+            }, {
+                $addToSet: {
+                    receivingAddresses: {
+                        $each: receivingAddresses
+                    }
+                }
+            }, {}, (err, updatedTx) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
         });
-    });
+    } catch (e) {
+        return console.error(e);
+    }
 };
 
 let counter = 0;
