@@ -20,7 +20,7 @@ const Transaction: React.FunctionComponent<{ currency: string, txid: string, to:
                 {txid}
             </a>
         </div>
-        <div>
+        {/* <div>
             {'From: '}
             <a
                 href={`https://bitpay.com/insight/#/${currency}/mainnet/address/${from}`}
@@ -29,7 +29,7 @@ const Transaction: React.FunctionComponent<{ currency: string, txid: string, to:
             >
                 {from}
             </a>
-        </div>
+        </div> */}
         <div>
             {'To: '}
             <a

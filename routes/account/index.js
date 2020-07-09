@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const { Transform } = require('stream');
 
 const Session = require('../../schema/Session');
 
@@ -167,6 +168,27 @@ router.post('/changeemail', authMiddleware, (req, res, next) => {
     }
     return res.status(200).json(req.body).end();
   });
+});
+
+router.post('/notificationSettings/update', authMiddleware, (req, res, next) => {
+  let {
+    notificationSettings: newSettings
+  } = req.body;
+  if (!newSettings) {
+    return res.status(400).json(new Error('Missing update')).end();
+  }
+  req.account.updateNotificationSettings(newSettings, (err) => {
+    if (err) {
+      return res.status(400).json(err).end();
+    }
+    return res.json(req.body);
+  });
+});
+
+router.post('/donations', authMiddleware, (req, res, next) => {
+  let finished = false;
+  let donationStream = req.account.getDonations();
+  return donationStream.pipe(res);
 });
 
 router.post('/', authMiddleware, (req, res, next) => {

@@ -10,12 +10,20 @@ const handle = nextApp.getRequestHandler()
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');
 const Session = require('./schema/Session');
+
 const RPCRequestManager = require('./RPCRequestManager');
+const ConfirmedBlockManager = require('./ConfirmedBlockManager');
+const DonationManager = require('./DonationManager');
 
 const app = express();
 
-const accountRouter = require('./routes/account');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Set up background managers / daemons / connections
 mongoose.connect('mongodb://127.0.0.1/midnightcash', {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -25,87 +33,28 @@ mongoose.connect('mongodb://127.0.0.1/midnightcash', {
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-let blockStream;
-
 db.once('open', () => {
   nextApp.prepare().then(() => {
     RPCRequestManager.start((err) => {
       if (err) {
         console.error(err);
       }
-      initializeBlockStream();
+      ConfirmedBlockManager.start((err) => {
+        if (err) {
+          console.error(err);
+        }
+        DonationManager.start((err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      });
     });
   });
 });
 
-const initializeBlockStream = () => {
-  blockStream = Block.watch(null, {
-    fullDocument: 'updateLookup'
-  }).on('change', (change) => {
-    handleBlockChange(change);
-  }).on('error', (err) => {
-    console.error(err);
-  }).on('close', (err) => {
-    initializeBlockStream();
-  });
-  console.log('Block Stream Initialized');
-};
-
-const handleBlockChange = (change) => {
-  if (change.operationType === 'update') {
-    console.log(change);
-    let transactions = change.fullDocument.transactions;
-    let allTxsProcessed = Object.values(transactions).reduce((acc, isProcessed) => {
-      return (acc || isProcessed);
-    }, false);
-
-    // Only process block if all its transactions are processed (each will cause a blockStream event)
-    if (!allTxsProcessed) {
-      return console.log('Skipping block that is still processing');
-    }
-    console.log('All txs processed; notifying addresses');
-
-    console.log(change.fullDocument);
-
-    let blockHash = change.fullDocument.hash;
-    let blockHeight = change.fullDocument.height;
-    let receivingAddresses = change.fullDocument.receivingAddresses;
-
-    Account.find({
-      receiveSettings: {
-        $elemMatch: {
-          currency: 'BCH',
-          address: {
-            $in: receivingAddresses
-          }
-        }
-      }
-    }).cursor().on('data', (account) => {
-      let receivingAddress = account.receiveSettings.find((rs) => {
-        return receivingAddresses.includes(rs.address);
-      }).address
-      let receivingTxid = Object.keys(change.fullDocument.transactions).find((txid) => {
-        return transactions[txid].receivingAddresses.includes(receivingAddress);
-      });
-      account.sendReceiveEmail(blockHash, receivingAddress, receivingTxid, (err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-    }).on('error', (err) => {
-      console.error(err);
-    }).on('end', () => {
-      console.log('Finished processing block');
-    });
-  }
-};
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+// Session Middleware - separate from auth middleware in account/js;
+// this just makes sure all requests have a cookie
 const createSession = (req, res, next) => {
   return Session.create((err, session) => {
     if (err) {
@@ -116,7 +65,6 @@ const createSession = (req, res, next) => {
     return next();
   });
 };
-
 app.use((req, res, next) => {
   try {
     let cookie = req.cookies['connect.sid'];
@@ -144,8 +92,11 @@ app.use((req, res, next) => {
   }
 });
 
+// Account API Router; for now the only API (no public routes)
+const accountRouter = require('./routes/account');
 app.use('/account', accountRouter);
 
+// Everything else goes to Next frontend
 app.get('*', (req, res) => {
   if (req.session.account) {
     return Account.findOne({
@@ -161,14 +112,5 @@ app.get('*', (req, res) => {
 app.use(function(req, res, next) {
   return res.status(404).end();
 });
-
-// error handler
-// app.use(function(err, req, res, next) {
-//   res.locals.message = err.message;
-//   res.locals.error = err; // req.app.get('env') === 'development' ? err : {};
-
-//   console.error(err);
-//   res.status(err.status || 500).json(err);
-// });
 
 module.exports = app;
