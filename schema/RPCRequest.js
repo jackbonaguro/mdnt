@@ -11,39 +11,43 @@ const RPC_STATUSES = {
 };
 
 const processNewBlock = (newBlock) => {
-    console.log('Process New Block');
-    console.log(newBlock);
-    const transactions = {};
-    for (txid of newBlock.result.tx) {
-        transactions[txid] = {
-            processed: false
-        };
-    }
-    return new Block({
-        height: newBlock.result.height,
-        hash: newBlock.result.hash,
-        transactions
-    }).save((err) => {
-        if (err) {
-            console.error(err);
+    try {
+        console.log('Process New Block');
+        console.log(newBlock);
+        const transactions = {};
+        for (txid of newBlock.result.tx) {
+            transactions[txid] = {
+                processed: false
+            };
         }
-        Object.keys(transactions).map((txid) => {
-            console.log('Save tx: ', txid);
-            return new Transaction({
-                hash: txid,
-                block: newBlock.result.hash
-            }).save((err) => {
-                if (err) {
-                    console.error(err);
-                }
-                return RPCRequestModel.create('getRawTransaction', [txid], 'processNewBlockTransaction', (err) => {
+        return new Block({
+            height: newBlock.result.height,
+            hash: newBlock.result.hash,
+            transactions
+        }).save((err) => {
+            if (err) {
+                console.error(err);
+            }
+            Object.keys(transactions).map((txid) => {
+                console.log('Save tx: ', txid);
+                return new Transaction({
+                    hash: txid,
+                    block: newBlock.result.hash
+                }).save((err) => {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                     }
+                    return RPCRequestModel.create('getRawTransaction', [txid], 'processNewBlockTransaction', (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
                 });
             });
         });
-    });
+    } catch (e) {
+        return console.error(e);
+    }
 };
 
 const processNewBlockTransaction = (rawTx, params) => {
