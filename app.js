@@ -3,9 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-const next = require('next');
-const dev = process.env.NODE_DEV !== 'production' //true false
-const nextApp = next({ dev });
+const nextApp = require('./client');
 const handle = nextApp.getRequestHandler()
 const Account = require('./schema/Account');
 const Block = require('./schema/Block');

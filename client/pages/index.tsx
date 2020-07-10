@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-// import { useSession } from 'next-auth/client'
 
 import style from './style';
 
