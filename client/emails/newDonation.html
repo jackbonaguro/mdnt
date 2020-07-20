@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <style>
+            @font-face {
+                font-family: 'OCR';
+                src: url('/public/fonts/OCR-ABT.ttf');
+            }
+            body {
+                margin: 0;
+                min-height: 100vh;
+                background-color: #111111;
+                color: #ddffff;
+                font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .logo {
+                font-family: "OCR", 'Courier New', Courier, monospace;
+                color: #88ffff;
+                font-size: 18pt;
+                /* font-weight: 100; */
+            }
+            .content {
+                width: 100%;
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            .center {
+                border-color: #88ffff;
+                border-radius: 25px;
+                border-width: 1px;
+                border-style: solid;
+                background-color: #222222;
+                padding: 25px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            .header {
+                padding: 25px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                border-color: #88ffff;
+                border-width: 1px;
+                border-bottom-style: solid;
+                background-color: #222222;
+                width: 100%;
+            }
+            .title {
+                font-size: 16pt;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="center">
+                <div class="header">
+                    <!-- <img src="../client/public/images/logo.png"/> -->
+                    <div class="logo">midnight.cash</div>
+                    <div class="title">Donation Received</div>
+                </div>
+                <div class="description">
+                    You have received a new donation. Click <a href="">here</a> to view more details.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

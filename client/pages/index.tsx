@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 
-import style from './style';
+import style from '../components/style';
 
-import List from './List';
-import ReceiveSetting from './ReceiveSetting';
-import Transaction from './Transaction';
-import AccountSettings from './AccountSettings';
-import DonationHistory from './DonationHistory';
-import VF from './VF';
-import HF from './HF';
+import List from '../components/List';
+import ReceiveSetting from '../components/ReceiveSetting';
+import Transaction from '../components/Transaction';
+import AccountSettings from '../components/AccountSettings';
+import DonationHistory from '../components/DonationHistory';
+import VF from '../components/VF';
+import HF from '../components/HF';
+
+import Input from '../components/input/input';
 
 global.debug = false;
 global.dark = false;
@@ -77,6 +79,7 @@ const Home: React.FunctionComponent<{ name: string, email: string }> = ({ name, 
 			minWidth: '100vw'
 		}, ...style.main}}>
 			<h1>Midnight Cash</h1>
+			<Input></Input>
 			<button onClick={() => {
 				console.log('Test notification');
 				let notification = new Notification('Donation Received', {
