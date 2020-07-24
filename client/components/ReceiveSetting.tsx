@@ -14,7 +14,7 @@ const ReceiveSetting: React.FunctionComponent<{ currency: string, type: string, 
             {`${type}: ${value}`}
         </div>
         <button onClick={() => {
-			fetch('/account/receiveSetting/remove', {
+			fetch('/api/account/receiveSetting/remove', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

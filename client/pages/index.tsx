@@ -37,7 +37,7 @@ const Home: React.FunctionComponent<{ name: string; email: string }> = ({
       });
     }
     if (email) {
-      fetch("/account/", {
+      fetch("/api/account/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +146,7 @@ const Home: React.FunctionComponent<{ name: string; email: string }> = ({
               ></input>
               <button
                 onClick={() => {
-                  fetch("/account/receiveSetting/add", {
+                  fetch("/api/account/receiveSetting/add", {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",

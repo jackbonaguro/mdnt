@@ -90,9 +90,9 @@ app.use((req, res, next) => {
   }
 });
 
-// Account API Router; for now the only API (no public routes)
-const accountRouter = require('./routes/account');
-app.use('/account', accountRouter);
+// REST API Router
+const apiRouter = require('./routes/api');
+app.use('/api', apiRouter);
 
 // Everything else goes to Next frontend
 app.get('*', (req, res) => {
