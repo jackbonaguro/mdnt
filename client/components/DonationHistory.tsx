@@ -13,7 +13,7 @@ const DonationHistory: React.FunctionComponent<{ email: string }> = ({ email }) 
     let [donationHistory, setDonationHistory] = useState<any[]>([]);
     useEffect(() => {
         if (email) {
-            let donationStream = fetch('/account/donations/', {
+            let donationStream = fetch('/api/account/donations/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

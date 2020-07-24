@@ -43,7 +43,7 @@ const AccountSettings: React.FunctionComponent<{
                                     ...notificationSettings,
                                     email: event.target.checked
                                 });
-                                fetch('/account/notificationSettings/update', {
+                                fetch('/api//account/notificationSettings/update', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const AccountSettings: React.FunctionComponent<{
                                     ...notificationSettings,
                                     push: event.target.checked
                                 });
-                                fetch('/account/notificationSettings/update', {
+                                fetch('/api/account/notificationSettings/update', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ const AccountSettings: React.FunctionComponent<{
                                     ...notificationSettings,
                                     webHook: event.target.checked
                                 });
-                                fetch('/account/notificationSettings/update', {
+                                fetch('/api/account/notificationSettings/update', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ const AccountSettings: React.FunctionComponent<{
                     Webhook Address
                     <input value="https://midnight.cash/webhook" onChange={() => {}}></input>
                     <button onClick={() => {
-                        fetch('/account/logout', {
+                        fetch('/api/account/logout', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ const AccountSettings: React.FunctionComponent<{
                         setLoginPassword(event.target.value);
                     }}></input>
                     <button onClick={() => {
-                        fetch('/account/login', {
+                        fetch('/api/account/login', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ const AccountSettings: React.FunctionComponent<{
                         setLoginPassword(event.target.value);
                     }}></input>
                     <button onClick={() => {
-                        fetch('/account/create', {
+                        fetch('/api/account/create', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

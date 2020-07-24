@@ -56,7 +56,7 @@ const noscript = (req, res) => {
    return `
    <script>
    let logout = () => {
-      fetch('/account/logout', {
+      fetch('/api/account/logout', {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json'
