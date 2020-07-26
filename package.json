@@ -10,6 +10,7 @@
   "dependencies": {
     "@sendgrid/mail": "^7.2.1",
     "async": "^3.2.0",
+    "bcrypt": "^5.0.0",
     "bitcoind-rpc": "^0.8.1",
     "bitcore-lib": "^8.20.3",
     "bitcore-lib-cash": "^8.20.3",
