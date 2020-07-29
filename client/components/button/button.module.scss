@@ -1,0 +1,20 @@
+@import "../../styles/variables";
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+  width: 300px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: transparent;
+  border: 1px solid $Cyan;
+  border-radius: 4px;
+  color: $Cyan;
+  cursor: pointer;
+  &__white {
+    background-color: $White;
+    color: $Black;
+  }
+}

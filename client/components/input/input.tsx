@@ -1,10 +1,28 @@
-import React from 'react'
-import classes from './input.module.scss';
+import React from "react";
+import { motion } from "framer-motion";
+import classes from "./input.module.scss";
+import classNames from "classnames/bind";
+const cx = classNames.bind(classes);
 
-const Input: React.FunctionComponent = () => {
-  return (
-    <div>wiggle</div>
-  );
-}
-  
+const Input: React.FC<{
+  label: string;
+  value: string;
+  name: string;
+  type: string;
+  placeholder: string;
+  onChange: (value: string) => void;
+}> = ({ label, value, name, type, placeholder, onChange }) => (
+  <motion.label className={classes.label}>
+    <motion.div className={classes.label__text}>{label}</motion.div>
+    <motion.input
+      className={classes.input}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  </motion.label>
+);
+
 export default Input;
