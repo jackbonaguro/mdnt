@@ -45,70 +45,8 @@ a {
   }
 }
 
-.logo {
-  background-color: $White;
-  color: $Blacker;
-  font-size: 18px;
-  font-weight: 500;
-  padding: 8px;
-  margin: 16px auto;
-  width: fit-content;
-  height: fit-content;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.forms {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: stretch;
-  width: 100%;
-  max-width: 960px;
-  height: 460px;
-  border-radius: 8px;
-  border: 3px solid #121c23;
-  color: $White;
-  margin: 240px auto 0;
-  overflow: hidden;
-  &__container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    &__block {
-      justify-content: center;
-      align-items: center;
-      &--green {
-        text-align: center;
-        background-color: #121c23;
-      }
-      &__chunk {
-        padding: 0 56px;
-        h1 {
-          font-size: 24px;
-          font-weight: 700;
-          color: $White;
-        }
-        p {
-          font-size: 16px;
-          line-height: 22px;
-          color: rgba($White, 0.8);
-          margin-top: 12px;
-        }
-        button {
-          margin-top: 32px;
-        }
-      }
-    }
-  }
-}
-
 .header {
   background-color: #080a10;
   height: 400px;
-  display: flex;
-  justify-content: flex-start;
-  .logo {
-    margin: 24px 0 0 24px;
-  }
+  padding: 24px;
 }

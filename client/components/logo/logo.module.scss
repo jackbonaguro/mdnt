@@ -1,0 +1,13 @@
+@import "../../styles/variables";
+
+.logo {
+  background-color: $White;
+  color: $Blacker;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px;
+  width: fit-content;
+  height: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

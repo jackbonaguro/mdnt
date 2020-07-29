@@ -2,6 +2,12 @@
   margin: auto auto;
 }
 
+.flex-align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .p {
   &t {
     &-0 {

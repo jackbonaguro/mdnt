@@ -1,62 +1,20 @@
-import React, { useState } from "react";
-import Link from "next/link";
+import React from "react";
 import { motion } from "framer-motion";
 
-import Button from "../components/button/button";
-import Input from "../components/input/input";
+import Logo from "../components/logo/logo";
+import OnboardChunk from "../components/onboard-chunk/onboard-chunk";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const handleSubmit = () => {
     console.log("submit");
   };
   return (
     <motion.main className="page">
-      <div className="logo">Midnight.Cash</div>
-
-      <div className="forms">
-        <div className="forms__container forms__container__block forms__container__block--green">
-          <div className="forms__container__block__chunk">
-            <h1>New User?</h1>
-            <p>
-              Sign up for Midnight.Cash and start receiving crypto donations
-              with a simple link.
-            </p>
-            <Link href="/register">
-              <a>
-                <Button color="white" text="Get Started" />
-              </a>
-            </Link>
-          </div>
-        </div>
-        <div className="forms__container forms__container__block">
-          <div className="forms__container__block__chunk">
-            <h1>Log In</h1>
-            <form onSubmit={handleSubmit}>
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="satoshi@midnight.cash"
-                value={email}
-                onChange={setEmail}
-              />
-
-              <Input
-                label="Password"
-                name="password"
-                type="password"
-                placeholder="password"
-                value={password}
-                onChange={setPassword}
-              />
-
-              <Button text="Log In" />
-            </form>
-          </div>
-        </div>
+      <div className="flex-align">
+        <Logo />
       </div>
+
+      <OnboardChunk mode="login" submit={handleSubmit} />
     </motion.main>
   );
 };
