@@ -46,7 +46,81 @@ a {
 }
 
 .header {
+  position: relative;
   background-color: #080a10;
-  height: 400px;
+  height: 468px;
   padding: 24px;
+
+  .account {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  background-color: #141e27;
+  border-radius: 3px;
+  padding: 10px;
+  &__icon {
+    width: 36px;
+    margin-right: 10px;
+  }
+  &__header {
+    font-size: 14px;
+    font-weight: 600;
+    color: $White;
+  }
+  &__caption {
+    font-size: 12px;
+    font-weight: 500;
+    color: #cfd8dc;
+    margin-top: 6px;
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background: $White;
+  box-shadow: 0px 2px 4px rgba(16, 21, 24, 0.05);
+  border-radius: 4px;
+  margin: auto 10px;
+  padding: 4px 10px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 700;
+    color: $Black;
+    padding: 24px 16px;
+
+    &__helper {
+      font-size: 16px;
+      font-weight: 600;
+      color: $Blue;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  }
+
+  &__labels {
+    display: flex;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: row;
+    max-width: 1200px;
+    margin: -72px auto 40px;
+  }
 }

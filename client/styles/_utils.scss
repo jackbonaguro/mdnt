@@ -2,10 +2,17 @@
   margin: auto auto;
 }
 
-.flex-align {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.flex {
+  &-center {
+    justify-content: center;
+    align-items: center;
+  }
+  &-row {
+    flex-direction: row;
+  }
+  &-col {
+    flex-direction: column;
+  }
 }
 
 .p {

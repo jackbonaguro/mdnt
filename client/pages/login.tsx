@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   };
   return (
     <motion.main className="page">
-      <div className="flex-align">
+      <div className="d-flex flex-center">
         <Logo />
       </div>
 
