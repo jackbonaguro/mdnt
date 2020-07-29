@@ -1,6 +1,7 @@
 @import "reset";
-@import "typography";
 @import "variables";
+@import "mixins";
+@import "typography";
 @import "utils";
 @import "form-card";
 
@@ -87,12 +88,16 @@ a {
 .card {
   position: relative;
   display: flex;
+  flex-direction: column;
   width: 100%;
   background: $White;
   box-shadow: 0px 2px 4px rgba(16, 21, 24, 0.05);
   border-radius: 4px;
-  margin: auto 10px;
-  padding: 4px 10px;
+  margin: 16px auto;
+
+  @include desktop {
+    margin: 0 10px;
+  }
 
   &__header {
     display: flex;
@@ -102,7 +107,7 @@ a {
     font-size: 18px;
     font-weight: 700;
     color: $Black;
-    padding: 24px 16px;
+    padding: 28px;
 
     &__helper {
       font-size: 16px;
@@ -115,12 +120,45 @@ a {
 
   &__labels {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-top: 1px solid rgba(black, 0.05);
+    border-bottom: 1px solid rgba(black, 0.05);
+    font-size: 12px;
+    font-weight: 600;
+    color: #aab8c1;
+    &__primary {
+      flex-basis: 20%;
+    }
+  }
+
+  &__cell {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1.25rem 1.75rem;
+    padding-left: 1.625rem;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(black, 0.05);
+    }
   }
 
   &__wrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
     max-width: 1200px;
-    margin: -72px auto 40px;
+    margin: auto auto;
+
+    @include desktop {
+      flex-direction: row;
+      transform: translateY(-100px);
+    }
   }
 }

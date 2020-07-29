@@ -27,9 +27,21 @@ const Dash: React.FC = () => {
             <span>Destinations</span>
             <button className="card__header__helper">Add Wallet</button>
           </div>
+          <div className="card__labels">
+            <div>Asset</div>
+            <div>Currency</div>
+            <div>Address</div>
+          </div>
+          <div className="card__body">
+            <div className="card__cell">Coinbase Wallet</div>
+            <div className="card__cell">Coinbase Pro</div>
+          </div>
         </div>
         <div className="card">
           <div className="card__header">TX History</div>
+          <div className="card__labels">
+            <div>Destinations</div>
+          </div>
         </div>
       </div>
     </motion.main>
