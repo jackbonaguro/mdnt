@@ -8,11 +8,19 @@ html,
 body {
   padding: 0;
   margin: 0;
-  background-color: #080a10;
 }
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  color: initial;
+  text-decoration: none;
+  &:hover {
+    color: initial;
+    text-decoration: none;
+  }
 }
 
 .hero {
@@ -25,6 +33,16 @@ body {
 .page {
   position: relative;
   padding: 24px;
+  background-color: #080a10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100vh;
+
+  &__light {
+    background-color: #f9fafb;
+  }
 }
 
 .logo {
@@ -82,5 +100,15 @@ body {
         }
       }
     }
+  }
+}
+
+.header {
+  background-color: #080a10;
+  height: 400px;
+  display: flex;
+  justify-content: flex-start;
+  .logo {
+    margin: 24px 0 0 24px;
   }
 }

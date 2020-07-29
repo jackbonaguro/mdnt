@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import Button from "../components/button/button";
 import Input from "../components/input/input";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const handleSubmit = () => {
@@ -18,22 +19,31 @@ const Login: React.FC = () => {
       <div className="forms">
         <div className="forms__container forms__container__block forms__container__block--green">
           <div className="forms__container__block__chunk">
-            <h1>New User?</h1>
+            <h1>Existing User?</h1>
             <p>
-              Sign up for Midnight.Cash and start receiving crypto donations
-              with a simple link.
+              Sign in to Midnight.Cash and start receiving crypto donations with
+              a simple link.
             </p>
-            <Link href="/register">
+            <Link href="/login">
               <a>
-                <Button color="white" text="Get Started" />
+                <Button color="white" text="Log In" />
               </a>
             </Link>
           </div>
         </div>
         <div className="forms__container forms__container__block">
           <div className="forms__container__block__chunk">
-            <h1>Log In</h1>
+            <h1>Sign Up</h1>
             <form onSubmit={handleSubmit}>
+              <Input
+                label="Username"
+                name="username"
+                type="username"
+                placeholder="satoshi.nakamoto"
+                value={username}
+                onChange={setUsername}
+              />
+
               <Input
                 label="Email"
                 name="email"
@@ -52,7 +62,7 @@ const Login: React.FC = () => {
                 onChange={setPassword}
               />
 
-              <Button text="Log In" />
+              <Button text="Sign Up" />
             </form>
           </div>
         </div>
@@ -61,4 +71,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
