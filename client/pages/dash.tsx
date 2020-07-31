@@ -23,6 +23,13 @@ const Dash: React.FC = () => {
             <span className="account__caption">ash@bhimasani.com</span>
           </div>
         </div>
+
+        <div className="net">
+          <div className="d-flex flex-center flex-col">
+            <span>Net</span>
+            <h1>$1000</h1>
+          </div>
+        </div>
       </div>
 
       <div className="card__wrapper">
