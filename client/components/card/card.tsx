@@ -15,6 +15,7 @@ const OnboardChunk: React.FC<{
     address: string;
   }[];
   transactions?: {
+    icon: string;
     timestamp: string;
     sender: string;
     amount: string;
@@ -53,20 +54,19 @@ const OnboardChunk: React.FC<{
               </div>
               <span>{cell.currency}</span>
               <span>{ellipses(cell.address)}</span>
+              <div className={classes.card__cell__manage}>Manage</div>
             </motion.div>
           ))}
         {transactions &&
           transactions.map((cell, index: number) => (
             <motion.div className={classes.card__cell} key={index}>
               <div className={classes.card__cell__primary}>
-                <img
-                  className={classes.card__cell__icon}
-                  src="https://ash.bhimasani.com/logos/bitpay-ext.svg"
-                />
+                <img className={classes.card__cell__icon} src={cell.icon} />
                 {cell.timestamp}
               </div>
               <span>{ellipses(cell.sender)}</span>
               <span>{cell.amount}</span>
+              <div className={classes.card__cell__manage}>Manage</div>
             </motion.div>
           ))}
       </div>

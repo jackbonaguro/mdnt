@@ -51,14 +51,16 @@ const Dash: React.FC = () => {
           labels={["Timestamp", "Sender", "Amount"]}
           transactions={[
             {
+              icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
               timestamp: "9:38 pm",
               sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
-              amount: "0.1",
+              amount: "0.1 BCH",
             },
             {
+              icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
               timestamp: "9:38 pm",
               sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
-              amount: "0.1",
+              amount: "0.1 BCH",
             },
           ]}
         />
