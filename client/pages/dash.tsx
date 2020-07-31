@@ -2,8 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import Logo from "../components/logo/logo";
+import Card from "../components/card/card";
 
 const Dash: React.FC = () => {
+  const addWallet = (): void => {
+    console.log("add wallet");
+  };
   return (
     <motion.main className="page page__light">
       <div className="header">
@@ -22,27 +26,42 @@ const Dash: React.FC = () => {
       </div>
 
       <div className="card__wrapper">
-        <div className="card">
-          <div className="card__header">
-            <span>Destinations</span>
-            <button className="card__header__helper">Add Wallet</button>
-          </div>
-          <div className="card__labels">
-            <div>Asset</div>
-            <div>Currency</div>
-            <div>Address</div>
-          </div>
-          <div className="card__body">
-            <div className="card__cell">Coinbase Wallet</div>
-            <div className="card__cell">Coinbase Pro</div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="card__header">TX History</div>
-          <div className="card__labels">
-            <div>Destinations</div>
-          </div>
-        </div>
+        <Card
+          title="Destinations"
+          helper={{ text: "Add Wallets", onClick: addWallet }}
+          labels={["Asset", "Currency", "Address"]}
+          wallets={[
+            {
+              icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
+              wallet: "Coinbase",
+              currency: "BCH",
+              address: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
+            },
+            {
+              icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
+              wallet: "Coinbase",
+              currency: "BCH",
+              address: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
+            },
+          ]}
+        />
+
+        <Card
+          title="TX History"
+          labels={["Timestamp", "Sender", "Amount"]}
+          transactions={[
+            {
+              timestamp: "9:38 pm",
+              sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
+              amount: "0.1",
+            },
+            {
+              timestamp: "9:38 pm",
+              sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
+              amount: "0.1",
+            },
+          ]}
+        />
       </div>
     </motion.main>
   );

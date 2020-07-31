@@ -86,67 +86,6 @@ a {
 }
 
 .card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background: $White;
-  box-shadow: 0px 2px 4px rgba(16, 21, 24, 0.05);
-  border-radius: 4px;
-  margin: 16px auto;
-
-  @include desktop {
-    margin: 0 10px;
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    font-size: 18px;
-    font-weight: 700;
-    color: $Black;
-    padding: 28px;
-
-    &__helper {
-      font-size: 16px;
-      font-weight: 600;
-      color: $Blue;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-  }
-
-  &__labels {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    border-top: 1px solid rgba(black, 0.05);
-    border-bottom: 1px solid rgba(black, 0.05);
-    font-size: 12px;
-    font-weight: 600;
-    color: #aab8c1;
-    &__primary {
-      flex-basis: 20%;
-    }
-  }
-
-  &__cell {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 1.25rem 1.75rem;
-    padding-left: 1.625rem;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0;
-    &:not(:last-child) {
-      border-bottom: 1px solid rgba(black, 0.05);
-    }
-  }
-
   &__wrapper {
     display: flex;
     flex-direction: column;
@@ -158,7 +97,7 @@ a {
 
     @include desktop {
       flex-direction: row;
-      transform: translateY(-100px);
+      transform: translateY(-168px);
     }
   }
 }
