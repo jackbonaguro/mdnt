@@ -4,9 +4,10 @@ import classes from "./card.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(classes);
 
-const OnboardChunk: React.FC<{
+const Card: React.FC<{
+  children?: React.ReactNode;
   title: string;
-  labels: string[];
+  labels?: string[];
   helper?: { text: string; onClick: () => void };
   wallets?: {
     icon: string;
@@ -20,7 +21,7 @@ const OnboardChunk: React.FC<{
     sender: string;
     amount: string;
   }[];
-}> = ({ title, helper, labels, wallets, transactions }) => {
+}> = ({ title, helper, labels, wallets, transactions, children }) => {
   const ellipses = (str: string): string => {
     return str.length > 12
       ? str.substr(0, 6) + "..." + str.substr(str.length - 6, str.length)
@@ -39,11 +40,13 @@ const OnboardChunk: React.FC<{
           </button>
         )}
       </div>
-      <div className={classes.card__labels}>
-        {labels.map((label: string, index: number) => (
-          <span key={index}>{label}</span>
-        ))}
-      </div>
+      {labels && (
+        <div className={classes.card__labels}>
+          {labels.map((label: string, index: number) => (
+            <span key={index}>{label}</span>
+          ))}
+        </div>
+      )}
       <div className={classes.card__body}>
         {wallets &&
           wallets.map((cell, index: number) => (
@@ -69,9 +72,10 @@ const OnboardChunk: React.FC<{
               <div className={classes.card__cell__manage}>Manage</div>
             </motion.div>
           ))}
+        {children}
       </div>
     </motion.div>
   );
 };
 
-export default OnboardChunk;
+export default Card;
