@@ -35,8 +35,10 @@ const Modal: React.FC<{
   close: () => void;
 }> = ({ children, open, close }) => {
   const content = useRef<HTMLDivElement>(null);
-  const handleClick = (e): void => {
-    if (content.current && !content.current.contains(e.target)) {
+  const handleClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ): void => {
+    if (content.current && !content.current.contains(e.target as Node)) {
       close();
     }
   };
