@@ -11,8 +11,9 @@ const Input: React.FC<{
   type: string;
   placeholder: string;
   onChange: (value: string) => void;
-}> = ({ label, value, name, type, placeholder, onChange }) => (
-  <motion.label className={classes.label}>
+  lightMode?: boolean;
+}> = ({ label, value, name, type, placeholder, onChange, lightMode }) => (
+  <motion.label className={cx({ label: true, light: lightMode })}>
     <motion.div className={classes.label__text}>{label}</motion.div>
     <motion.input
       className={classes.input}

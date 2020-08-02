@@ -7,7 +7,7 @@ import Modal from "../components/modal/modal";
 import Input from "../components/input/input";
 
 const Dash: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
+  const [newWallet, setNewWallet] = useState<string>("");
   const [addingWallet, addWallet] = useState<boolean>(false);
   return (
     <>
@@ -17,14 +17,24 @@ const Dash: React.FC = () => {
             title="Add Wallet"
             helper={{ text: "Save", onClick: () => addWallet(false) }}
           >
-            <div style={{ padding: 40 }}>
+            <div style={{ padding: 40, paddingTop: 0 }}>
               <Input
                 label="Wallet Name"
-                name="email"
-                type="email"
-                placeholder="satoshi@midnight.cash"
-                value={email}
-                onChange={setEmail}
+                name="new-wallet"
+                type="text"
+                placeholder="My Wallet"
+                value={newWallet}
+                onChange={setNewWallet}
+                lightMode
+              />
+              <Input
+                label="Address"
+                name="wallet-address"
+                type="text"
+                placeholder="0x0000000000000"
+                value={newWallet}
+                onChange={setNewWallet}
+                lightMode
               />
             </div>
           </Card>
@@ -56,8 +66,8 @@ const Dash: React.FC = () => {
         <div className="card__wrapper">
           <Card
             title="Destinations"
-            helper={{ text: "Add Wallets", onClick: addWallet }}
-            labels={["Asset", "Currency", "Address"]}
+            helper={{ text: "Add Wallets", onClick: () => addWallet(true) }}
+            labels={["Wallet", "Currency", "Address"]}
             wallets={[
               {
                 icon: "/wallet-logos/coinbase.svg",
