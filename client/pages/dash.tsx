@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Gravatar from "react-gravatar";
 
 import Logo from "../components/logo/logo";
 import Card from "../components/card/card";
@@ -45,9 +46,10 @@ const Dash: React.FC = () => {
           <Logo />
 
           <div className="account">
-            <img
+            <Gravatar
+              email="ash@bhimasani.com"
+              size={36}
               className="account__icon"
-              src="https://ash.bhimasani.com/logos/ab-logo.svg"
             />
             <div className="d-flex flex-col">
               <span className="account__header">Ash Bhimasani</span>
