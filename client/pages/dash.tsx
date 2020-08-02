@@ -6,10 +6,16 @@ import Logo from "../components/logo/logo";
 import Card from "../components/card/card";
 import Modal from "../components/modal/modal";
 import Input from "../components/input/input";
+import copyUtil from "../utils/copy-util";
 
 const Dash: React.FC = () => {
   const [newWallet, setNewWallet] = useState<string>("");
   const [addingWallet, addWallet] = useState<boolean>(false);
+  const user = {
+    tag: "ash",
+    fullName: "Ash Bhimasani",
+    email: "ash@bhimasani.com",
+  };
   return (
     <>
       <Modal open={addingWallet} close={() => addWallet(false)}>
@@ -46,23 +52,22 @@ const Dash: React.FC = () => {
           <Logo />
 
           <div className="account">
-            <Gravatar
-              email="ash@bhimasani.com"
-              size={36}
-              className="account__icon"
-            />
+            <Gravatar email={user.email} size={36} className="account__icon" />
             <div className="d-flex flex-col">
-              <span className="account__header">Ash Bhimasani</span>
-              <span className="account__caption">ash@bhimasani.com</span>
+              <span className="account__header">{user.fullName}</span>
+              <span className="account__caption">{user.email}</span>
             </div>
           </div>
 
-          <div className="net">
-            <div className="d-flex flex-center flex-col">
-              <span>Net</span>
-              <h1>$1000</h1>
-            </div>
-          </div>
+          <motion.a
+            onClick={() => copyUtil("https://midnight.cash/u/ash")}
+            href="https://midnight.cash/u/ash"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="net"
+          >
+            midnight.cash/u/ash
+          </motion.a>
         </div>
 
         <div className="card__wrapper">
