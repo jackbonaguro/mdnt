@@ -7,19 +7,15 @@ import Modal from "../components/modal/modal";
 import Input from "../components/input/input";
 
 const Dash: React.FC = () => {
-  const addWallet = (): void => {
-    console.log("add wallet");
-  };
-  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [addingWallet, addWallet] = useState<boolean>(false);
   return (
     <>
-      <Modal>
+      <Modal open={addingWallet} close={() => addWallet(false)}>
         <div className="card__wrapper" style={{ maxWidth: 600 }}>
           <Card
             title="Add Wallet"
-            helper={{ text: "Save", onClick: addWallet }}
+            helper={{ text: "Save", onClick: () => addWallet(false) }}
           >
             <div style={{ padding: 40 }}>
               <Input
@@ -64,14 +60,14 @@ const Dash: React.FC = () => {
             labels={["Asset", "Currency", "Address"]}
             wallets={[
               {
-                icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
+                icon: "/wallet-logos/coinbase.svg",
                 wallet: "Coinbase",
                 currency: "BCH",
                 address: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
               },
               {
-                icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
-                wallet: "Coinbase",
+                icon: "/wallet-logos/copay-wallet.svg",
+                wallet: "Copay",
                 currency: "BCH",
                 address: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
               },
@@ -83,13 +79,13 @@ const Dash: React.FC = () => {
             labels={["Timestamp", "Sender", "Amount"]}
             transactions={[
               {
-                icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
+                icon: "/wallet-logos/copay-wallet.svg",
                 timestamp: "9:38 pm",
                 sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
                 amount: "0.1 BCH",
               },
               {
-                icon: "https://ash.bhimasani.com/logos/bitpay-ext.svg",
+                icon: "/wallet-logos/coinbase.svg",
                 timestamp: "9:38 pm",
                 sender: "qzqzzne78upqzfd40nh9at3jtsgpr9qqe5v5rcpv6e",
                 amount: "0.1 BCH",

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <linearGradient id="edge-wallet-avatar-a" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#253245"/>
+      <stop offset="45.449%" stop-color="#223E59"/>
+      <stop offset="100%" stop-color="#1F4D72"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <circle cx="12.5" cy="12.5" r="12.5" fill="url(#edge-wallet-avatar-a)"/>
+    <g fill="#66EDA8" fill-rule="nonzero" transform="translate(5.556 5.833)">
+      <polygon points="13.681 1.874 9.629 13.02 .239 13.02 2.345 7.224 6.046 7.224 7.992 1.874"/>
+      <polygon points="7.147 0 5.027 5.811 0 5.811 2.121 0"/>
+    </g>
+  </g>
+</svg>
