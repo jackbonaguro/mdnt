@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
 const { Transform } = require('stream');
 
 const Session = require('../../schema/Session');
@@ -16,17 +17,28 @@ router.post('/login', (req, res) => {
     if (err || !account) {
       return res.status(500).end(err || new Error('Account not found'));
     }
-    if (account.password !== req.body.password) {
-      return res.status(401).end(new Error('Incorrect password'));
-    }
-
-    req.session.account = account._id;
-    return req.session.save((err) => {
+    // if (account.password !== req.body.password) {
+    //   return res.status(401).end(new Error('Incorrect password'));
+    // }
+    return bcrypt.compare(req.body.password, account.password, function(err, result) {
+      // result == false
       if (err) {
-        return res.status(500).end(err);
+        console.error(err);
+        return res.status(400).json(err).end();
       }
-      return res.status(200).json({
-        email: req.body.email
+      if (!result) {
+        return res.status(401).end(new Error('Incorrect password'));
+      }
+
+      // Successfully authenticated
+      req.session.account = account._id;
+      return req.session.save((err) => {
+        if (err) {
+          return res.status(500).end(err);
+        }
+        return res.status(200).json({
+          email: req.body.email
+        });
       });
     });
   });
@@ -51,26 +63,30 @@ router.post('/create', (req, res, next) => {
   if (!email || !username || !password) {
     return res.end('Missing parameter');
   }
-  // TODO: Hash password
-  
-  new Account({
-    email,
-    username,
-    password
-  }).save((err, newAccount) => {
+  return bcrypt.hash(password, 10, function(err, hash) {
     if (err) {
+      console.error(err);
       return res.status(400).json(err).end();
     }
-    if (!newAccount) {
-      return res.status(400).json(new Error('Failed to save account')).end();
-    }
-
-    req.session.account = newAccount._id;
-    return req.session.save((err) => {
+    new Account({
+      email,
+      username,
+      password: hash
+    }).save((err, newAccount) => {
       if (err) {
-        return res.status(500).end(err);
+        return res.status(400).json(err).end();
       }
-      return res.status(200).json({});
+      if (!newAccount) {
+        return res.status(400).json(new Error('Failed to save account')).end();
+      }
+  
+      req.session.account = newAccount._id;
+      return req.session.save((err) => {
+        if (err) {
+          return res.status(500).end(err);
+        }
+        return res.status(200).json({});
+      });
     });
   });
 });
