@@ -72,17 +72,19 @@ a {
   &__icon {
     width: 36px;
     margin-right: 10px;
+    border-radius: 99vh;
   }
   &__header {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     color: $White;
   }
   &__caption {
     font-size: 12px;
     font-weight: 500;
     color: #cfd8dc;
-    margin-top: 6px;
+    margin-top: 5px;
+    padding-right: 3px;
   }
 }
 
@@ -93,16 +95,15 @@ a {
   background-color: transparent;
   border: 2px solid $Cyan;
   border-radius: 99vh;
-  width: 150px;
-  height: 150px;
   margin: 0 auto;
-  span {
-    font-size: 14px;
-    color: #657786;
-    transform: translateY(-2px);
-  }
-  h1 {
-    color: $White;
+  width: fit-content;
+  height: fit-content;
+  padding: 25px;
+  font-size: 16px;
+  color: $Cyan;
+  transition: all 300ms ease;
+  &:hover {
+    color: darken($Cyan, 25%);
   }
 }
 

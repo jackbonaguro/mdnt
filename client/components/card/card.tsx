@@ -28,7 +28,7 @@ const Card: React.FC<{
       : str;
   };
   return (
-    <motion.div className={classes.card}>
+    <motion.div className={classes.card} layout>
       <div className={classes.card__header}>
         <span>{title}</span>
         {helper && (
@@ -69,7 +69,7 @@ const Card: React.FC<{
               </div>
               <span>{ellipses(cell.sender)}</span>
               <span>{cell.amount}</span>
-              <div className={classes.card__cell__manage}>Manage</div>
+              <div className={classes.card__cell__manage}>Details</div>
             </motion.div>
           ))}
         {children}
