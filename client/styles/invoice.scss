@@ -1,0 +1,36 @@
+@import "variables";
+
+.invoice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  border: 3px solid #121c23;
+  color: $White;
+  border-radius: 12px;
+  width: 364px;
+  padding: 40px;
+
+  margin-top: 150px;
+
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.qr-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background-color: #121c23;
+  border-radius: 10px;
+  margin-top: 56px;
+}
+
+.caption {
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  opacity: 0.5;
+  margin-top: 16px;
+}

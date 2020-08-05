@@ -10,9 +10,9 @@ import copyUtil from "../utils/copy-util";
 import { GetServerSideProps } from "next";
 import { Http2ServerResponse } from "http2";
 
-let decoder = new TextDecoder("utf-8");
+const decoder = new TextDecoder("utf-8");
 
-const Dash: React.FC<{ email: String }> = ({ email }) => {
+const Dash: React.FC<{ email: string }> = ({ email }) => {
   const [newWallet, setNewWallet] = useState<string>("");
   const [addingWallet, addWallet] = useState<boolean>(false);
   const user = {
@@ -22,7 +22,7 @@ const Dash: React.FC<{ email: String }> = ({ email }) => {
   };
   const [receiveSettings, setReceiveSettings] = useState([]);
   const [username, setUsername] = useState("");
-  let [donationHistory, setDonationHistory] = useState<any[]>([]);
+  const [donationHistory, setDonationHistory] = useState<any[]>([]);
 
   // onLoad effect
   useEffect(() => {
@@ -33,47 +33,53 @@ const Dash: React.FC<{ email: String }> = ({ email }) => {
       });
     }
     if (email) {
-      let donationStream = fetch('/api/account/donations/', {
-        method: 'POST',
+      const donationStream = fetch("/api/account/donations/", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            email
+          email,
         }),
-        credentials: 'include'
-      }).then(res => {
-        if (!res.body) {
-          return;
-        }
-        let buffer = Buffer.from('');
-        return res.body.pipeTo(new WritableStream({
-          write(message) {
-            try {
-              const msg = decoder.decode(message);
-              buffer = Buffer.concat([buffer, Buffer.from(msg)]);
-            } catch (e) {
-              console.error(e);
-            }
-          },
-          close() {
-            let bufferStr = decoder.decode(buffer);
-            let split = bufferStr.split('\n');
-            let donations = split.map((str) => {
-              if (!str) {
-                return;
-              }
-              try {
-                const donation = JSON.parse(str);
-                return donation;
-              } catch (e) {
-                console.error(e);
-              }
-            }).filter((s) => s);
-            return setDonationHistory(donations);
+        credentials: "include",
+      })
+        .then((res) => {
+          if (!res.body) {
+            return;
           }
-        }));
-      }).catch(console.error);
+          let buffer = Buffer.from("");
+          return res.body.pipeTo(
+            new WritableStream({
+              write(message) {
+                try {
+                  const msg = decoder.decode(message);
+                  buffer = Buffer.concat([buffer, Buffer.from(msg)]);
+                } catch (e) {
+                  console.error(e);
+                }
+              },
+              close() {
+                const bufferStr = decoder.decode(buffer);
+                const split = bufferStr.split("\n");
+                const donations = split
+                  .map((str) => {
+                    if (!str) {
+                      return;
+                    }
+                    try {
+                      const donation = JSON.parse(str);
+                      return donation;
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  })
+                  .filter((s) => s);
+                return setDonationHistory(donations);
+              },
+            })
+          );
+        })
+        .catch(console.error);
 
       fetch("/api/account/", {
         method: "POST",
@@ -99,48 +105,53 @@ const Dash: React.FC<{ email: String }> = ({ email }) => {
     }
   }, []);
 
-  let icons: { [key: string]: string } = {
-    'coinbase': '/wallet-logos/coinbase.svg',
-    'copay': '/wallet-logos/copay-wallet.svg'
+  const icons: { [key: string]: string } = {
+    coinbase: "/wallet-logos/coinbase.svg",
+    copay: "/wallet-logos/copay-wallet.svg",
   };
 
   const wallets = receiveSettings
-  ? receiveSettings
-      .map((i) => {
-        return {
-          currency: i.currency,
-          type: "Address",
-          value: i.address,
-        };
-      })
-      .map((i) => {
-        let label = (i.currency === 'BCH') ? 'Coinbase' : 'Copay';
-        let iconPath = null;
-        Object.keys(icons).find((icon) => {
-          if (label.toLowerCase().includes(icon)) {
-            iconPath = icons[icon];
-          }
-        });
-        return {
-          icon: iconPath,
-          wallet: label,
-          currency: i.currency,
-          address: (i.type === 'Address') ? i.value : 'Invalid'
-        }
-      })
-  : [];
+    ? receiveSettings
+        .map((i) => {
+          return {
+            currency: i.currency,
+            type: "Address",
+            value: i.address,
+          };
+        })
+        .map((i) => {
+          const label = i.currency === "BCH" ? "Coinbase" : "Copay";
+          let iconPath = null;
+          Object.keys(icons).find((icon) => {
+            if (label.toLowerCase().includes(icon)) {
+              iconPath = icons[icon];
+            }
+          });
+          return {
+            icon: iconPath,
+            wallet: label,
+            currency: i.currency,
+            address: i.type === "Address" ? i.value : "Invalid",
+          };
+        })
+    : [];
 
-  const transactions = (donationHistory && donationHistory.length) ? donationHistory.map((i) => {
-    console.log(i);
-    return {
-      icon: '',
-      timestamp: i.transaction,
-      sender: i.receivingAddress,
-      amount: i.currency
-    }
-  }) : [];
+  const transactions =
+    donationHistory && donationHistory.length
+      ? donationHistory.map((i) => {
+          console.log(i);
+          return {
+            icon: "",
+            timestamp: i.transaction,
+            sender: i.receivingAddress,
+            amount: i.currency,
+          };
+        })
+      : [];
 
-  const invoiceUrl = username ? `midnight.cash/u/${username}` : 'midnight.cash/register';
+  const invoiceUrl = username
+    ? `midnight.cash/u/${username}`
+    : "midnight.cash/register";
 
   return (
     <>
@@ -186,8 +197,8 @@ const Dash: React.FC<{ email: String }> = ({ email }) => {
           </div>
 
           <motion.a
-            onClick={() => copyUtil('https://' + invoiceUrl)}
-            href={'https://' + invoiceUrl}
+            onClick={() => copyUtil("https://" + invoiceUrl)}
+            href={"https://" + invoiceUrl}
             target="_blank"
             rel="noreferrer noopener"
             className="net"
