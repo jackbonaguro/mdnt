@@ -10,11 +10,48 @@ import Input from "../input/input";
 
 const OnboardChunk: React.FC<{
   mode: "login" | "register";
-  submit: () => void;
-}> = ({ mode, submit }) => {
+}> = ({ mode }) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const submit = () => {
+    if (mode === "login") {
+      fetch('/api/account/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email,
+            password
+        }),
+        credentials: 'include'
+      }).then(res => res.json()).then(console.log).then(() => {
+          window.location.replace('/dash');
+      }).catch((err) => {
+        console.error(err);
+      });
+    } else {
+      fetch('/api/account/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email,
+            username,
+            password
+        }),
+        credentials: 'include'
+      }).then(res => res.json()).then(console.log).then(() => {
+          window.location.replace('/dash');
+      }).catch((err) => {
+        console.error(err);
+      });
+    }
+  }
+
   return (
     <motion.div className={classes.forms}>
       <div
@@ -49,7 +86,7 @@ const OnboardChunk: React.FC<{
       >
         <div className={classes.forms__container__block__chunk}>
           <h1>{mode === "login" ? "Log In" : "Sign Up"}</h1>
-          <form onSubmit={submit}>
+          <form>
             {mode === "register" && (
               <Input
                 label="Username"
@@ -78,8 +115,10 @@ const OnboardChunk: React.FC<{
               value={password}
               onChange={setPassword}
             />
-
-            <Button text={mode === "login" ? "Log In" : "Sign Up"} />
+            <Button
+              text={mode === "login" ? "Log In" : "Sign Up"}
+              onClick={submit}
+            />
           </form>
         </div>
       </div>
