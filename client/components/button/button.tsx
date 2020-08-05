@@ -4,11 +4,13 @@ import classes from "./button.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(classes);
 
-const Button: React.FC<{ text: string; color?: "white" }> = ({
+const Button: React.FC<{ text: string; color?: "white", onClick: () => void }> = ({
   text,
   color,
+  onClick
 }) => (
   <motion.button
+    type={'button'}
     whileHover={{ scale: 0.99 }}
     whileTap={{ scale: 0.97 }}
     className={cx({
@@ -16,7 +18,7 @@ const Button: React.FC<{ text: string; color?: "white" }> = ({
       "h-align": true,
       button__white: color === "white",
     })}
-    type="submit"
+    onClick={onClick}
   >
     {text}
   </motion.button>

@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {
     email: req.body.email
   }, (err, account) => {
     if (err || !account) {
-      return res.status(500).end(err || new Error('Account not found'));
+      return res.status(500).json(err || new Error('Account not found')).end();
     }
     // if (account.password !== req.body.password) {
     //   return res.status(401).end(new Error('Incorrect password'));
@@ -27,14 +27,14 @@ router.post('/login', (req, res) => {
         return res.status(400).json(err).end();
       }
       if (!result) {
-        return res.status(401).end(new Error('Incorrect password'));
+        return res.status(401).json(new Error('Incorrect password')).end();
       }
 
       // Successfully authenticated
       req.session.account = account._id;
       return req.session.save((err) => {
         if (err) {
-          return res.status(500).end(err);
+          return res.status(500).json(err).end();
         }
         return res.status(200).json({
           email: req.body.email
