@@ -181,16 +181,11 @@ const Home: React.FunctionComponent<{ name: string; email: string }> = ({
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps<{
-  query;
-  req;
-  res;
-}> = async ({ query, req, res }) => {
-  const name = query.name instanceof Array ? query.name.join(", ") : query.name;
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       name: "Midnight Cash",
-      email: res.locals.email || null,
+      email: "test@midnight.cash",
     },
   };
 };

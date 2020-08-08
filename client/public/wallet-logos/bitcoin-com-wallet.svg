@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <rect id="bitcoin-com-wallet-a" width="232" height="232" x="0" y="0" rx="25"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(12 12)">
+    <mask id="bitcoin-com-wallet-b" fill="#fff">
+      <use xlink:href="#bitcoin-com-wallet-a"/>
+    </mask>
+    <g mask="url(#bitcoin-com-wallet-b)">
+      <rect width="77.333" height="77.333" fill="#BFF0E2"/>
+      <rect width="77.333" height="77.333" x="154.667" y="154.667" fill="#BFF0E2"/>
+      <rect width="77.333" height="77.333" x="77.333" fill="#7FE1C4"/>
+      <rect width="77.333" height="77.333" x="154.667" y="77.333" fill="#7FE1C4"/>
+      <rect width="77.333" height="77.333" x="77.333" y="154.667" fill="#7FE1C4"/>
+      <rect width="77.333" height="77.333" y="77.333" fill="#7FE1C4"/>
+      <rect width="77.333" height="77.333" x="154.667" fill="#00C48A"/>
+      <rect width="77.333" height="77.333" x="77.333" y="77.333" fill="#00C48A"/>
+      <rect width="77.333" height="77.333" y="154.667" fill="#00C48A"/>
+    </g>
+  </g>
+</svg>

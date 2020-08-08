@@ -1,25 +1,125 @@
+@import "reset";
 @import "variables";
+@import "mixins";
+@import "typography";
+@import "utils";
 @import "form-card";
-
 
 html,
 body {
+  position: relative;
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-
-
+a {
+  color: initial;
+  text-decoration: none;
+  &:hover {
+    color: initial;
+    text-decoration: none;
+  }
+}
 
 .hero {
   background-color: #161616;
   color: white;
   display: flex;
   height: 100vh;
+}
+
+.page {
+  position: relative;
+  padding: 24px;
+  background-color: #080a10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100vh;
+
+  &__light {
+    background-color: #f9fafb;
+  }
+}
+
+.header {
+  position: relative;
+  background-color: #080a10;
+  height: 468px;
+  padding: 24px;
+
+  .account {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  background-color: #141e27;
+  border-radius: 3px;
+  padding: 10px;
+  &__icon {
+    width: 36px;
+    margin-right: 10px;
+    border-radius: 99vh;
+  }
+  &__header {
+    font-size: 14px;
+    font-weight: 500;
+    color: $White;
+  }
+  &__caption {
+    font-size: 12px;
+    font-weight: 500;
+    color: #cfd8dc;
+    margin-top: 5px;
+    padding-right: 3px;
+  }
+}
+
+.net {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: 2px solid $Cyan;
+  border-radius: 99vh;
+  margin: 0 auto;
+  width: fit-content;
+  height: fit-content;
+  padding: 25px;
+  font-size: 16px;
+  color: $Cyan;
+  transition: all 300ms ease;
+  &:hover {
+    color: darken($Cyan, 25%);
+  }
+}
+
+.card {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto auto;
+
+    @include desktop {
+      flex-direction: row;
+      transform: translateY(-168px);
+    }
+  }
 }

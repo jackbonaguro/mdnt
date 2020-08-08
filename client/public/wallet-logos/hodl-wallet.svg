@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <g fill="none" fill-rule="evenodd">
+    <circle cx="128" cy="128" r="128" fill="#131313"/>
+    <g fill="#FFF" fill-rule="nonzero" transform="translate(28 63)">
+      <polygon points="200 74.562 147.304 74.562 100.029 27.567 74.304 53.139 60.633 39.516 100.029 .354 155.318 55.349 200 55.349"/>
+      <polygon points="100.278 129.765 45.009 74.77 0 74.77 0 55.557 53.015 55.557 100.278 102.552 125.675 77.247 139.367 90.871"/>
+      <polygon points="90.392 55.145 109.618 55.18 109.653 74.405 90.428 74.37" transform="rotate(-45 100.023 64.775)"/>
+    </g>
+  </g>
+</svg>
