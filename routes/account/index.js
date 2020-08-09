@@ -17,9 +17,6 @@ router.post('/login', (req, res) => {
     if (err || !account) {
       return res.status(500).json(err || new Error('Account not found')).end();
     }
-    // if (account.password !== req.body.password) {
-    //   return res.status(401).end(new Error('Incorrect password'));
-    // }
     return bcrypt.compare(req.body.password, account.password, function(err, result) {
       // result == false
       if (err) {

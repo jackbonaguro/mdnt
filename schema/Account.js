@@ -136,5 +136,13 @@ Account.methods.getAccount = function () {
   };
 };
 
+Account.methods.getPublicAccount = function () {
+  let self = this;
+  return {
+    username: self.username,
+    receiveSettings: self.receiveSettings
+  };
+};
+
 const AccountModel = mongoose.model('Account', Account);
 module.exports = AccountModel;
